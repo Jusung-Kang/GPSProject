@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # 1. 내 Spring Boot 애플리케이션
+  spring-app:
+    build: ./backend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+      - redis
+      - kafka
+    environment:
+      # Spring Boot가 컨테이너 내부에서 다른 서비스를 찾을 수 있도록 주소 설정
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/mydatabase
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=yourpassword
+      - SPRING_REDIS_HOST=redis
+      - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+
+  # 2. MySQL
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=yourpassword
+      - MYSQL_DATABASE=mydatabase
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # 3. Redis
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+# 4. Kafka (Zookeeper 포함 - Confluent Inc. 이미지로 변경)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+
+# Docker가 관리하는 볼륨 (데이터 영속성)
+volumes:
+  mysql-data:
+  redis-data:

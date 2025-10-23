@@ -1,10 +1,10 @@
-package com.jskang.gpsproject;
+package com.jskang.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class GpsProjectApplicationTests {
+class BackendApplicationTests {
 
     @Test
     void contextLoads() {

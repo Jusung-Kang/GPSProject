@@ -6,7 +6,7 @@ plugins {
 
 group = 'com.jsKang'
 version = '0.0.1-SNAPSHOT'
-description = 'GPSProject'
+description = 'backend'
 
 java {
     toolchain {
