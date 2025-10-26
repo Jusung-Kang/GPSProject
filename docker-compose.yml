@@ -1,20 +1,20 @@
-version: '3.8'
-
 services:
-  # 1. 내 Spring Boot 애플리케이션
+  # 1. Spring Boot 애플리케이션
   spring-app:
     build: ./backend
     ports:
       - "8080:8080"
     depends_on:
-      - mysql
-      - redis
-      - kafka
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      kafka:
+        condition: service_healthy # Kafka가 healthy 상태가 될 때까지 대기
     environment:
-      # Spring Boot가 컨테이너 내부에서 다른 서비스를 찾을 수 있도록 주소 설정
-      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/mydatabase
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/fitness_tracker
       - SPRING_DATASOURCE_USERNAME=root
-      - SPRING_DATASOURCE_PASSWORD=yourpassword
+      - SPRING_DATASOURCE_PASSWORD=my-secret-pw
       - SPRING_REDIS_HOST=redis
       - SPRING_KAFKA_BOOTSTRAP_SERVERS=kafka:9092
 
@@ -24,8 +24,13 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=yourpassword
-      - MYSQL_DATABASE=mydatabase
+      - MYSQL_ROOT_PASSWORD=my-secret-pw
+      - MYSQL_DATABASE=fitness_tracker
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-pmy-secret-pw"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
     volumes:
       - mysql-data:/var/lib/mysql
 
@@ -37,28 +42,44 @@ services:
     volumes:
       - redis-data:/data
 
-# 4. Kafka (Zookeeper 포함 - Confluent Inc. 이미지로 변경)
+  # 4. Kafka & Zookeeper
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.3.0
     ports:
       - "2181:2181"
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+    healthcheck:
+      # 포트(2181)가 열렸는지 확인하는 단순한 방법 사용
+      test: ["CMD", "nc", "-z", "localhost", "2181"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s # 시작 후 15초 동안 healthcheck 실패 무시
 
   kafka:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.3.0
     ports:
       - "9092:9092"
     depends_on:
-      - zookeeper
+      zookeeper:
+        condition: service_healthy # Zookeeper 포트가 열릴 때까지 대기
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      # kafka-topics.sh를 사용해 브로커 접속 가능 여부 확인
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s # 시작 후 30초 동안 healthcheck 실패 무시
 
-# Docker가 관리하는 볼륨 (데이터 영속성)
 volumes:
   mysql-data:
   redis-data:
