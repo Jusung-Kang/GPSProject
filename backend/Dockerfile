@@ -1,6 +1,7 @@
 # 1. 베이스 이미지 선택 (Java 17 환경)
 # 본인의 Spring Boot 프로젝트와 Java 버전이 맞는지 확인하세요. (예: 11, 17, 21)
-FROM openjdk:17-jdk-slim
+# FROM openjdk:17-slim
+FROM eclipse-temurin:17-jdk
 
 # 2. 작업 디렉토리 설정
 WORKDIR /app

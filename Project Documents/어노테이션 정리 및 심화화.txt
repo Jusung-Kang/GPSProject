@@ -1,0 +1,118 @@
+===================================================
+JPA 엔티티 어N(Lombok 포함) - 심화 가이드
+[역할, 용도, 그리고 "왜?"]
+===================================================
+
+정말 훌륭하게 정리하셨네요! 이미 핵심적인 역할과 이유를 완벽하게 파악하고 계십니다.
+
+여기에 몇 가지 **실무에서 부딪히는 함정(Pitfall), 고급 팁, 그리고 "왜?"에 대한 조금 더 깊은 설명**을 덧붙여서 학습을 도와드리겠습니다.
+
+---
+
+### 1. Lombok 어노테이션 (심화 팁)
+
+* **@Getter / @Setter**
+    * **심화 팁 (Setter 주의):** 실무에서는 `@Setter` 사용을 지양하는 경우가 많습니다. 특히 `@Id`가 붙은 식별자 필드에는 절대 `@Setter`를 열어두지 않는 것이 좋습니다.
+    * **이유:** 객체의 상태가 무분별하게 변경되는 것을 막기 위해서입니다. `@Setter` 대신 `changeEmail(String newEmail)`처럼 **의도가 명확한 메소드**를 만들어 내부 로직(예: 이메일 유효성 검사)과 함께 값을 변경하는 것이 객체지향적입니다.
+    * **JPA와 Setter:** JPA가 DB에서 데이터를 불러올 때 `@Setter`를 쓰지 않습니다. '리플렉션(Reflection)'이라는 기술을 사용해 필드에 직접 값을 주입합니다.
+
+* **@NoArgsConstructor**
+    * **심화 팁 (AccessLevel):** JPA 스펙상 기본 생성자는 `public` 또는 `protected`여야 합니다. 하지만 `public`으로 열어두면 개발자가 실수로 `new UserM()`처럼 의도치 않게 객체를 생성할 수 있습니다.
+    * **권장:** `@NoArgsConstructor(access = AccessLevel.PROTECTED)`를 사용하세요. 이렇게 하면 개발자의 실수는 막으면서, JPA(및 하이버네이트)가 프록시 객체를 생성하는 데는 문제가 없습니다.
+
+* **@Builder**
+    * **심화 팁 (생성자 상호작용):** `@Builder`를 사용하면, Lombok은 *자동으로* 모든 필드를 받는 생성자(`@AllArgsConstructor`)를 `private`으로 만들어 사용합니다. 만약 `@NoArgsConstructor`와 `@AllArgsConstructor`를 *모두* 명시적으로 사용 중이라면 `@Builder`가 작동 방식이 달라질 수 있으니 주의해야 합니다.
+
+* **@ToString**
+    * **심화 팁 (성능 및 보안):**
+        1.  **보안:** 비밀번호, 주민번호 같은 민감한 필드는 `@ToString.Exclude`를 붙여서 로그에 절대 남지 않도록 해야 합니다.
+        2.  **성능:** `@Lob`이 붙은 대용량 텍스트나, `byte[]`로 된 이미지 파일 필드도 `Exclude`하는 것이 좋습니다. 로그를 찍다가 시스템 전체가 느려질 수 있습니다.
+
+* **@EqualsAndHashCode**
+    * **심화 팁 (JPA에서 가장 중요한 함정):** 이 어노테이션은 JPA 엔티티에 사용할 때 매우 위험할 수 있습니다.
+    * **문제 상황:**
+        1.  DB에서 조회한 엔티티 A (ID: 1)
+        2.  `detached` (준영속) 상태가 된 엔티티 A
+        3.  이후 A를 `merge` (병합) 하려 할 때, JPA는 영속성 컨텍스트(1차 캐시)에서 "ID가 1인 객체가 이미 있는가?"를 비교합니다.
+    * **함정:** 만약 `equals()`가 모든 필드를 비교하도록 되어 있으면, JPA는 캐시에 있는 객체와 `detached`된 객체를 '다르다'고 판단하여 불필요한 `UPDATE` 쿼리를 날릴 수 있습니다.
+    * **권장:** 엔티티의 `equals()`와 `hashCode()`는 **비즈니스 키**(예: 변경되지 않는 이메일, 학번 등)가 있다면 그것을 기준으로 만들거나, **오직 `@Id` 필드**만을 기준으로 만드는 것이 안전합니다. Lombok의 `@EqualsAndHashCode(of = "id")` 처럼 특정 필드를 지정할 수 있습니다.
+
+---
+
+### 2. JPA 어노테이션 (심화 팁)
+
+#### (A) 클래스 레벨 어노테이션
+
+* **@Entity**
+    * **심화 팁 (필수 조건):** `@Entity` 클래스는 반드시 `@Id`가 하나 있어야 하며, `@NoArgsConstructor` (주로 `protected`)가 있어야 합니다.
+
+* **@Table(name = "USER_M")**
+    * **심화 팁 (uniqueConstraints, indexes):** `@Table` 어노테이션은 이름 매핑 외에 DB 제약조건을 거는 데도 유용합니다.
+    * **예시:** `uniqueConstraints`는 특정 컬럼을 유니크 키로 지정하며(예: 이메일 중복 방지), `indexes`는 조회 성능 향상을 위해 인덱스를 지정할 때 사용합니다.
+    * `@Table(name = "USER_M", uniqueConstraints = {@UniqueConstraint(columnNames = {"Email"})})`
+
+* **@Embeddable**
+    * **개념 보충:** `@Embeddable` 클래스는 '값 타입(Value Type)'이라고 부릅니다. 이는 `@Id`를 갖지 않으며, 생명주기를 전적으로 자신을 포함하는 `@Entity`에 의존한다는 뜻입니다.
+    * **예시 (Address):** `Address` 클래스(street, city, zipCode)를 만들어 `UserM`이 `Address` 필드를 갖게 하면, `USER_M` 테이블에 `street`, `city`, `zipCode` 컬럼이 그대로 '펼쳐져서' 저장됩니다. 별도 테이블이 생기지 않습니다.
+
+#### (B) 필드 레벨 어노테이션 (ID 및 컬럼)
+
+* **@Id**
+    * **심화 팁 (키 생성 전략):** `@Id`만 붙이면 개발자가 직접 키를 할당해야 합니다. 보통 **`@GeneratedValue`**를 함께 사용합니다.
+    * **`@GeneratedValue(strategy = GenerationType.IDENTITY)`:** MySQL, MariaDB의 `AUTO_INCREMENT` 방식. `INSERT` 쿼리가 나갈 때 DB가 ID를 생성합니다.
+    * **`@GeneratedValue(strategy = GenerationType.SEQUENCE)`:** Oracle의 `SEQUENCE` 방식.
+
+* **@Column**
+    * **심화 팁 (추가 속성):**
+        * `updatable = false`: 이 필드는 수정할 수 없음을 명시합니다. (예: `createdAt` 생성일자)
+        * `insertable = false`: 이 필드는 `INSERT` 시점에 포함되지 않음을 명시합니다. (예: `updatedAt` 수정일자)
+        * `columnDefinition = "TEXT"`: `String` 타입이지만 DB에서는 `VARCHAR(255)`가 아닌 `TEXT` 타입으로 만들고 싶을 때 사용합니다.
+
+#### (C) 연관관계 어노테이션 (외래 키 및 관계)
+
+* **@ManyToOne / @OneToMany**
+    * **핵심 개념 (연관관계의 주인, Owner):**
+        * JPA에서 양방향 관계(서로가 서로를 참조)를 맺을 때, 둘 중 하나는 '주인'이 되어야 합니다.
+        * 주인은 **외래 키(FK)를 관리하는 쪽**입니다.
+        * 보통 **`@ManyToOne`이 붙은 쪽(N쪽)**이 주인입니다. `GpsData`가 `History_Id`라는 FK를 가지므로 `GpsData`가 주인입니다.
+        * 주인이 아닌 쪽(`@OneToMany`가 붙은 `ExerciseHistory`)은 `mappedBy` 속성을 사용해 "나는 주인이 아니며, 저쪽(GpsData)의 'exerciseHistory' 필드에 의해 매핑된다"고 알려야 합니다.
+        * **`@OneToMany(mappedBy = "exerciseHistory")`**
+        * 데이터 저장은 **반드시 주인 쪽 엔티티에 값을 세팅**해야 DB에 반영됩니다.
+
+* **@JoinColumn**
+    * **심화 팁 (생략 시):** `@ManyToOne`에서 `@JoinColumn`을 생략하면, JPA가 '필드명_참조하는테이블의ID' (예: `exerciseHistory_id`)라는 이름으로 FK를 자동으로 만듭니다. 하지만 명시적으로 써주는 것이 가장 좋습니다.
+
+#### (D) 연관관계 속성 (부가 옵션)
+
+* **fetch = FetchType.LAZY (지연 로딩)**
+    * **함정 (EAGER의 기본값):** `@OneToMany`, `@ManyToMany`는 기본값이 `LAZY`라서 괜찮지만, **`@ManyToOne`, `@OneToOne`은 기본값이 `EAGER` (즉시 로딩)**입니다.
+    * **치명적인 문제:** `GpsData`를 조회할 때 `EAGER`라면, `GpsData` 1000개를 조회할 때 *연관된 `ExerciseHistory`를 조회하는 쿼리 1000개*가 추가로 나갈 수 있습니다. 이것이 바로 **N+1 문제**입니다.
+    * **필수 습관:** **모든 연관관계는 `FetchType.LAZY`로 설정**하고, 필요할 때만 JPQL의 `JOIN FETCH`를 사용해 한 번에 불러오는 것이 성능에 가장 좋습니다.
+
+* **cascade = CascadeType.ALL (영속성 전이)**
+    * **개념 보충:** `ALL`은 편리하지만 위험할 수 있습니다. `PERSIST`(저장), `MERGE`(병합), `REMOVE`(삭제) 등 필요한 것만 골라 쓰는 것이 좋습니다.
+    * **예시:** `CascadeType.PERSIST`만 사용하면, `ExerciseHistory`를 저장할 때 `GpsData` 리스트도 *알아서* `INSERT` 해줍니다. 하지만 `ExerciseHistory`를 삭제해도 `GpsData`는 삭제되지 않습니다.
+    * **언제 쓰는가?** 부모와 자식의 생명주기가 '완전히' 같을 때만 씁니다. (예: 게시물과 첨부파일)
+
+* **orphanRemoval = true (고아 객체 제거)**
+    * **`CascadeType.REMOVE`와의 차이점 (중요):**
+        * `CascadeType.REMOVE`: **부모가 삭제될 때** 자식도 삭제됩니다.
+        * `orphanRemoval = true`: **부모의 컬렉션에서 자식이 제거되면** (예: `history.getGpsDataList().remove(someGpsData)`), 부모가 삭제되지 않아도 해당 자식은 '고아'로 간주되어 `DELETE` 쿼리가 나갑니다.
+
+---
+
+### 3. (보너스) 자주 함께 사용되는 주요 어노테이션
+
+정리해주신 목록 외에, 이 어노테이션들도 엔티티 설계 시 거의 필수적으로 사용됩니다.
+
+* **@MappedSuperclass**
+    * **역할:** 여러 엔티티가 공통으로 가지는 필드(예: `createdAt`, `updatedAt`, `createdBy`)를 모아두는 '추상 클래스'에 붙입니다.
+    * **사용 이유:** 이 클래스는 테이블로 매핑되지 않지만, **이 클래스를 상속받는 자식 엔티티들**(`UserM`, `ExerciseHistory` 등)의 테이블에 해당 필드들(`createdAt` 등)이 **컬럼으로 포함**됩니다. 중복 코드를 완벽하게 제거해줍니다.
+
+* **@Transient**
+    * **역할:** 엔티티 클래스 안에 선언된 필드지만, DB 테이블의 컬럼으로는 매핑하지 말라고 JPA에게 알립니다.
+    * **사용 이유:** DB와 무관하게, 객체 내부에서만 잠시 계산용으로 사용하거나 특정 로직을 위해 필요한 임시 변수일 때 사용합니다.
+
+* **@Transactional (Spring 어노테이션)**
+    * **역할:** (JPA는 아니지만) JPA를 사용한다면 99% 함께 사용하는 스프링 어노테이션입니다. **JPA의 모든 데이터 변경(INSERT, UPDATE, DELETE) 작업은 반드시 트랜잭션 안에서 수행되어야 합니다.**
+    * **사용 이유:** 데이터를 저장하거나 수정하는 서비스 메소드(예: `saveHistory(...)`) 위에 이 어노테이션을 붙여야, 해당 작업이 하나의 트랜잭션으로 묶여 정상적으로 DB에 반영됩니다.

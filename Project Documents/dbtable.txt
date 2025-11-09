@@ -1,0 +1,72 @@
+/* 1. 외래 키 제약 조건을 잠시 끕니다 (삭제 순서 오류 방지) */
+SET foreign_key_checks = 0;
+
+/* 2. 모든 테이블을 확실하게 삭제합니다. */
+DROP TABLE IF EXISTS GPS_DATA;
+DROP TABLE IF EXISTS EXERCISE_HISTORY;
+DROP TABLE IF EXISTS AVAILABLE_SPORTS;
+DROP TABLE IF EXISTS SPORT_TYPE;
+DROP TABLE IF EXISTS USER_M;
+
+/* 3. 외래 키 제약 조건을 다시 켭니다. */
+SET foreign_key_checks = 1;
+
+
+/* --- 이제 '명시적' FK 구문으로 생성합니다 --- */
+
+-- 1. 유저 테이블 생성
+CREATE TABLE USER_M(
+    Id VARCHAR(100) NOT NULL PRIMARY KEY,
+    Email VARCHAR(100) NOT NULL,
+    PhoneNumber VARCHAR(11) NOT NULL
+) ENGINE=InnoDB;
+
+-- 2. 운동종목 테이블 생성
+CREATE TABLE SPORT_TYPE(
+    SportId VARCHAR(8) NOT NULL PRIMARY KEY,
+    SportNm VARCHAR(200) NOT NULL
+) ENGINE=InnoDB;
+
+-- 3. 할수있는 운동 테이블 생성
+CREATE TABLE AVAILABLE_SPORTS(
+    SportId VARCHAR(8) NOT NULL,
+    Id VARCHAR(100) NOT NULL,
+    PositionCd VARCHAR(4),
+    Level VARCHAR(8),
+
+    PRIMARY KEY(Id, SportId),
+
+    -- "명시적" 외래 키 제약조건을 사용
+    CONSTRAINT FK_AvailableSports_SportType
+        FOREIGN KEY (SportId) REFERENCES SPORT_TYPE(SportId),
+    CONSTRAINT FK_AvailableSports_UserM
+        FOREIGN KEY (Id) REFERENCES USER_M(Id)
+) ENGINE=InnoDB;
+
+-- 4. 운동 히스토리 테이블 생성
+CREATE TABLE EXERCISE_HISTORY(
+    History_Id INT NOT NULL PRIMARY KEY,
+    Id VARCHAR(100) NOT NULL,
+    SportId VARCHAR(8) NOT NULL,
+    Seq INT NOT NULL,
+    Dt DATETIME NOT NULL,
+
+    CONSTRAINT FK_ExerciseHistory_UserM
+        FOREIGN KEY (Id) REFERENCES USER_M(Id),
+    CONSTRAINT FK_ExerciseHistory_SportType
+        FOREIGN KEY (SportId) REFERENCES SPORT_TYPE(SportId)
+) ENGINE=InnoDB;
+
+-- 5. GPS 테이블 생성
+CREATE TABLE GPS_DATA(
+    Gps_Id INT NOT NULL PRIMARY KEY,
+    History_Id INT NOT NULL,
+    Longitude DECIMAL(10, 7) NOT NULL,
+    Latitude DECIMAL(10, 7) NOT NULL,
+    Distance DECIMAL(10, 2) NOT NULL,
+    Speed DECIMAL(5, 2) NOT NULL,
+    Gps_Seq INT NOT NULL,
+
+    CONSTRAINT FK_GpsData_ExerciseHistory
+        FOREIGN KEY (History_Id) REFERENCES EXERCISE_HISTORY(History_Id)
+) ENGINE=InnoDB;

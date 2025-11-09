@@ -23,12 +23,12 @@ public class SportType {
     @Column(name = "SportNm", length = 200, nullable = false)
     private String sportNm;
 
-    @OneToMany(mappedBy = "SportType", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "sportType", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     @ToString.Exclude
     private Set<AvailableSports> availableSports = new HashSet<>();
 
-    @OneToMany(mappedBy = "SportType")
+    @OneToMany(mappedBy = "sportType")
     @Builder.Default
     @ToString.Exclude
     private Set<ExerciseHistory> exerciseHistory = new HashSet<>();

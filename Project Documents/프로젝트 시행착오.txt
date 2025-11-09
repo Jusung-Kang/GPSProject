@@ -1,0 +1,116 @@
+frontend 파일생성
+    - npx @react-native-community/cli init frontend
+
+Gradl
+    - .\gradlew.bat --stop
+	
+Java Version
+    - 처음에 25버전 -> 21버전 -> 17버전으로 내려옴 이유는 react-native 에서 호환이 되는 버전이
+	  17버전이라고 함.
+	  
+frontend 실행
+    - npx react-native run-android
+
+Docker 중지
+    - docker stop mysql-db
+	- 중지 체크 -> docker ps
+	
+backend 파일에 Dockerfile 추가. 
+	FROM openjdk:17-jdk-slim
+	WORKDIR /app
+	EXPOSE 8080
+	ENTRYPOINT ["java", "-jar", "app.jar"]
+
+backend 파일에 Dockerfile을 추가한 후
+    cd backend 
+	.\gradlew build -x test
+	ㄴ gradlew build를 하는데 test를 빼고 실행. 
+	ㄴ test를 빼고 하는 이유는 mysql을 사용하지않고 H2를 사용하기때문
+	ㄴ test 할경우에 만약 db에 연결이 안되어 있다면 main application.properties를 찾아감.
+	
+
+git
+	
+# 1. 모든 변경 사항을 장바구니에 담고
+git add .
+ㄴ 상태확인 -> git status
+
+# 2. 메시지를 붙여서 로컬에 저장하고
+git commit -m "로그인 기능 추가"
+
+# 3. GitHub에 업로드한다.
+git push origin main
+
+# 4. 바뀐것 보는 방법
+git show
+ㄴ 체크 후에는 q 를 눌러 나올수 있다. 
+
+
+Docker Compose 실행 문제 해결 요약
+===================================
+
+1. Docker Desktop 잔여 프로세스 문제
+-----------------------------------
+* 문제: Docker Desktop 시작 시, 이전 프로세스가 남아 시작을 방해함 ('Lingering processes detected').
+* 해결: 'Stop processes' 버튼 클릭 (또는 작업 관리자/재부팅).
+
+
+2. Kafka-Zookeeper 연결 경쟁 상태 (Race Condition)
+--------------------------------------------------
+* 문제: 'docker-compose up' 시 Kafka가 Zookeeper 연결에 실패 ('Connection refused' 또는 'Timed out'). Spring Boot 앱도 시작 지연됨.
+* 원인: 'depends_on' 설정이 서비스 준비 완료까지 기다려주지 않음.
+* 해결: 
+    - Zookeeper와 Kafka 서비스에 'healthcheck' 설정 추가.
+    - Kafka와 Spring Boot 앱의 'depends_on'에 'condition: service_healthy' 추가하여 서비스 준비 완료까지 대기하도록 수정.
+
+
+3. Healthcheck 설정 오류 및 수정
+---------------------------------
+* 문제: Healthcheck 추가 후에도 Zookeeper, Kafka가 '(unhealthy)' 상태로 표시됨.
+* 원인:
+    - Zookeeper: 사용된 이미지에서 'ruok', 'stat' 명령어가 healthcheck용으로 기본 활성화되지 않음. 환경 변수 설정도 적용되지 않음.
+    - Kafka: 'cub kafka ready' 명령어의 기본 대기 시간이 부족하거나, 명령어가 이미지 내에 없을 가능성.
+* 해결 (최종):
+    - Zookeeper Healthcheck: 단순 포트 확인 ('nc -z localhost 2181') 방식으로 변경. 'start_period' 추가 (15초).
+    - Kafka Healthcheck: Kafka 기본 도구 ('kafka-topics.sh --list') 사용으로 변경. 'start_period' 추가 (30초).
+
+
+4. Healthcheck 로그 오해
+-------------------------
+* 문제: Zookeeper 로그에 'EndOfStreamException'이 계속 출력되어 사용자가 오류로 오인함.
+* 원인 설명: 주기적인 healthcheck 실행 시 연결 후 바로 종료하기 때문에 발생하는 정상 로그임. 서비스가 '(healthy)' 상태면 무시해도 됨.
+
+
+결과
+----
+최종 수정된 'docker-compose.yml' 파일을 통해, 컴퓨터 재부팅 후에도 'docker-compose up' 명령만으로 모든 서비스가 안정적으로 순차 실행되도록 함.
+
+Docker Desktop.exe 가 실행중인지 확인하는 방
+tasklist | findstr /i "Docker Desktop.exe"
+
+만약 실행중이라면 Docker Desktop 좌하단에 있는 ... 의 
+Quit Docker Desktop 클릭하기
+
+만약 실행중이라면 강제로 끄는 방법
+taskkill /IM "Docker Desktop.exe" /F
+
+2025/11/09
+docker를 노트북에서 PC로 옮기면서 자바를 읽어들이지 못하고 있어 backend에 있는 Dockerfile에 FROM을 수정하고 있다. 
+
+{
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false
+}
+
+-다운받은 java 버전을 전부 입력하니 java는 넘어갔음. 
+ ㄴFROM eclipse-temurin:17-jdk
+
+-빌드를 하려했는데 오류가 나와 보니 테스트 까지 포함하고 빌드하려 하여 .\gradlew build -x test 실행함
+
+-docker-compose up 을 하는데 제대로 작동이 되지 않아 보니 spring에 대소문자가 바껴있는것 확인.
+ ㄴ .\gradlew build -x test 후 docker-compose up --build 하니 정상작동함.
