@@ -96,7 +96,6 @@ taskkill /IM "Docker Desktop.exe" /F
 
 2025/11/09
 docker를 노트북에서 PC로 옮기면서 자바를 읽어들이지 못하고 있어 backend에 있는 Dockerfile에 FROM을 수정하고 있다. 
-
 {
   "builder": {
     "gc": {
@@ -106,11 +105,19 @@ docker를 노트북에서 PC로 옮기면서 자바를 읽어들이지 못하고
   },
   "experimental": false
 }
-
 -다운받은 java 버전을 전부 입력하니 java는 넘어갔음. 
  ㄴFROM eclipse-temurin:17-jdk
-
 -빌드를 하려했는데 오류가 나와 보니 테스트 까지 포함하고 빌드하려 하여 .\gradlew build -x test 실행함
-
 -docker-compose up 을 하는데 제대로 작동이 되지 않아 보니 spring에 대소문자가 바껴있는것 확인.
  ㄴ .\gradlew build -x test 후 docker-compose up --build 하니 정상작동함.
+
+
+2025/11/11 
+Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는 값이 나오지 않았다. 알고보니 Spring에서 소문자로 된 테이블을 만들고 자동으로 그 테이블을 바라보고 있었음.
+ㄴ 보통 소문자를 사용한다고 함. 
+그래서 대문자로 된 테이블을 drop 하고 소문자로 된 테이블에 값을 넣고 Postman 돌려보니 값이 잘 나온다.
+
+오늘 한것
+- findAll Api Design
+  ㄴ @GetMapping("api/users")
+      ㄴ findAll 함수를 사용하여 user_m 테이블에 있는 유저 모두 불러오도록 하였음.

@@ -6,14 +6,20 @@ import com.jskang.backend.repository.UserMRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 public class UserMService {
 
-    private UserMRepository userMRepository;
+    private final UserMRepository userMRepository;
 
     public UserM save(SaveUserRequest saveUserRequest) {
         return userMRepository.save(saveUserRequest.toUser());
+    }
+
+    public List<UserM> findAll() {
+        return userMRepository.findAll();
     }
 
 }
