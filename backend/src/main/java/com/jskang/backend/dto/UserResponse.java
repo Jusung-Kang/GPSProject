@@ -1,6 +1,5 @@
 package com.jskang.backend.dto;
 
-import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.UserM;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +14,7 @@ public class UserResponse {
     private final String email;
     private final String phoneNumber;
 
-    private List<AvailableSportResponse> availableSports;
+    private List<AvailableSportsResponse> availableSports;
 
     private int exerciseHistoryCount;
 
@@ -26,7 +25,7 @@ public class UserResponse {
         this.phoneNumber = userM.getPhoneNumber();
 
         this.availableSports = userM.getAvailableSports().stream()
-                .map(AvailableSportResponse::new)
+                .map(AvailableSportsResponse::new)
                 .collect(Collectors.toList());
         this.exerciseHistoryCount = userM.getExerciseHistory().size();
     }

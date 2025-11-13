@@ -121,3 +121,12 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 - findAll Api Design
   ㄴ @GetMapping("api/users")
       ㄴ findAll 함수를 사용하여 user_m 테이블에 있는 유저 모두 불러오도록 하였음.
+	  
+
+2025/11/13
+ㄴ 아직 client <-> controller <-> service <-> repository <-> db
+   의 계념이 머리속에서 정리가 잘 안된다. 책을 보고 따라하지만말고, AI를 보고 따라 만들지만 말고 정확하게 어떻게 돌아가는지 흐름을 파악하고 만들면 도움이 많이 될것 같다. 
+   코드를 짤때 미리 해당 플로우를 그림으로 그린다음 실행하는것도 괜찮은 방법인것 같다. 
+ㄴ 오늘의 API Design은  AvailableSports 의 save, findAll, findById 이 3가지를 구현하였다.
+ㄴ 명칭을 조금더 깔끔하게 정리할수있으면 좋을것 같다.
+

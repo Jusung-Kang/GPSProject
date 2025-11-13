@@ -22,4 +22,9 @@ public class UserMService {
         return userMRepository.findAll();
     }
 
+    public UserM findById(String id) {
+        return userMRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    }
+
 }

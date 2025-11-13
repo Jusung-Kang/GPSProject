@@ -4,16 +4,18 @@ import com.jskang.backend.domain.AvailableSports;
 import lombok.Getter;
 
 @Getter
-public class AvailableSportResponse {
+public class AvailableSportsResponse {
 
     private final String sportName;
     private final String position;
     private final String level;
 
-    public AvailableSportResponse(AvailableSports availableSports){
+    public AvailableSportsResponse(AvailableSports availableSports){
         this.sportName = availableSports.getSportType().getSportNm();
         this.position = availableSports.getPositionCd();
         this.level = availableSports.getLevel();
     }
+
+
 
 }

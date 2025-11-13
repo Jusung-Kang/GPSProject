@@ -35,4 +35,5 @@ public class AvailableSports {
     @ToString.Exclude
     private SportType sportType;
 
+
 }

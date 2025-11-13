@@ -7,12 +7,10 @@ import com.jskang.backend.service.UserMService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -22,10 +20,10 @@ public class UserMApiController {
 
     @PostMapping("api/users")
     public ResponseEntity<UserM> saveUserM(@RequestBody SaveUserRequest saveUserRequest) {
-        UserM saveUser = userMService.save(saveUserRequest);
+        UserM saved = userMService.save(saveUserRequest);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(saveUser);
+                .body(saved);
     }
 
     @GetMapping("api/users")
@@ -37,6 +35,18 @@ public class UserMApiController {
 
         return ResponseEntity.ok()
                 .body(getUsersAll);
+    }
+
+    @GetMapping("api/users/{id}")
+    public ResponseEntity<UserResponse> getUserMById(@PathVariable String id) {
+        UserM userM = userMService.findById(id);
+
+        if (userM == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .body(new UserResponse(userM));
     }
 
 
