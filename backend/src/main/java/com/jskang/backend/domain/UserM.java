@@ -11,18 +11,19 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "USER_M")
+@Table(name = "user_m")
 
 public class UserM {
 
     @Id
-    @Column(name = "Id", length = 100, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "Id", nullable = false)
+    private Long id;
 
-    @Column(name = "Email", length = 100, nullable = false)
+    @Column(name = "Email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "PhoneNumber", length = 11, nullable = false)
+    @Column(name = "PhoneNumber", length = 11, nullable = false, unique = true)
     private String phoneNumber;
 
     @OneToMany(mappedBy = "userM", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -35,5 +36,14 @@ public class UserM {
     @ToString.Exclude
     private Set<ExerciseHistory> exerciseHistory = new HashSet<>();
 
+    public void addAvailableSports(AvailableSports availableSports) {
+        this.availableSports.add(availableSports);
+        availableSports.setUserM(this);
+    }
+
+    public void addExerciseHistory(ExerciseHistory exerciseHistory) {
+        this.exerciseHistory.add(exerciseHistory);
+        exerciseHistory.setUserM(this);
+    }
 
 }

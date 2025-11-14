@@ -9,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "AVAILABLE_SPORTS")
-
+@Table(name = "available_sports")
 public class AvailableSports {
 
     @EmbeddedId
@@ -34,6 +33,5 @@ public class AvailableSports {
     @JoinColumn(name = "SportId")
     @ToString.Exclude
     private SportType sportType;
-
 
 }

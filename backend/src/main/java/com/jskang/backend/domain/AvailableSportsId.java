@@ -16,11 +16,11 @@ import java.io.Serializable;
 
 public class AvailableSportsId implements Serializable {
 
-    @Column(name = "Id", length = 100, nullable = false)
-    private String id;
+    @Column(name = "Id", nullable = false)
+    private Long id;
 
-    @Column(name = "SportId", length = 8, nullable = false)
-    private String sportId;
+    @Column(name = "SportId", nullable = false)
+    private Long sportId;
 
 
 }

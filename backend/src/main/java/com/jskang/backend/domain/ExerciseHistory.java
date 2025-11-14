@@ -13,13 +13,13 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "EXERCISE_HISTORY")
+@Table(name = "exercise_history")
 
 public class ExerciseHistory {
 
     @Id
     @Column(name = "History_Id", nullable = false)
-    private Integer historyId;
+    private Long historyId;
 
     @Column(name = "Seq", nullable = false)
     private String seq;

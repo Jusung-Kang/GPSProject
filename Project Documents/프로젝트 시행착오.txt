@@ -130,3 +130,6 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ 오늘의 API Design은  AvailableSports 의 save, findAll, findById 이 3가지를 구현하였다.
 ㄴ 명칭을 조금더 깔끔하게 정리할수있으면 좋을것 같다.
 
+2025/11/15
+ㄴ dto, service, domain 부분을 완전 다 바꾸게 되었다. dto는 데이터를 전달하는 깡통이 되어야 하는데 toEntity와 같이 builder를 하고 있었다. 이 부분을 service 쪽에서 json을 entity로 가공하여 db로 보낼수 있도록 수정하였다.
+ㄴ AI를 사용해서 Controller 부분 수정을 하였으나 완벅하게 이해가 가지는 않는상황이다. 

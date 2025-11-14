@@ -8,24 +8,24 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class UserResponse {
+public class UserResponseDto {
 
-    private final String id;
+    private final Long id;
     private final String email;
     private final String phoneNumber;
 
-    private List<AvailableSportsResponse> availableSports;
+    private List<AvailableSportsResponseDto> availableSports;
 
     private int exerciseHistoryCount;
 
     @Builder
-    public UserResponse(UserM userM) {
+    public UserResponseDto(UserM userM) {
         this.id = userM.getId();
         this.email = userM.getEmail();
         this.phoneNumber = userM.getPhoneNumber();
 
         this.availableSports = userM.getAvailableSports().stream()
-                .map(AvailableSportsResponse::new)
+                .map(AvailableSportsResponseDto::new)
                 .collect(Collectors.toList());
         this.exerciseHistoryCount = userM.getExerciseHistory().size();
     }

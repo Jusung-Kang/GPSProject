@@ -1,8 +1,8 @@
 package com.jskang.backend.controller;
 
 import com.jskang.backend.domain.AvailableSports;
-import com.jskang.backend.dto.AvailableSportsResponse;
-import com.jskang.backend.dto.SaveAvailableSportsRequest;
+import com.jskang.backend.dto.AvailableSportsResponseDto;
+import com.jskang.backend.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.service.AvailableSportsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class AvailableSportsApiController {
     private final AvailableSportsService availableSportsService;
 
     @PostMapping("api/sport")
-    public ResponseEntity<AvailableSports> save(@RequestBody SaveAvailableSportsRequest saveAvailableSportsRequest){
-        AvailableSports saved = availableSportsService.save(saveAvailableSportsRequest);
+    public ResponseEntity<AvailableSports> save(@RequestBody SaveAvailableSportsRequestDto saveAvailableSportsRequestDto){
+        AvailableSports saved = availableSportsService.save(saveAvailableSportsRequestDto);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(saved);
@@ -34,11 +34,11 @@ public class AvailableSportsApiController {
     }
 
     @GetMapping("api/sport/{id}")
-    public ResponseEntity<AvailableSportsResponse> getSportById(@PathVariable String id){
+    public ResponseEntity<AvailableSportsResponseDto> getSportById(@PathVariable String id){
         AvailableSports sport = availableSportsService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new AvailableSportsResponse(sport));
+                .body(new AvailableSportsResponseDto(sport));
     }
 
 }

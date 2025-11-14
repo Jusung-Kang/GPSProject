@@ -12,13 +12,14 @@ import java.util.Set;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "SPORT_TYPE")
+@Table(name = "sport_type")
 
 public class SportType {
 
     @Id
-    @Column(name = "SportId", length = 8, nullable = false)
-    private String sportId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "SportId", nullable = false)
+    private Long sportId;
 
     @Column(name = "SportNm", length = 200, nullable = false)
     private String sportNm;

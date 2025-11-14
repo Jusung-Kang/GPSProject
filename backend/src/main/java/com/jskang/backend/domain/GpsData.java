@@ -11,13 +11,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "GPS_DATA")
+@Table(name = "gps_data")
 
 public class GpsData {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Gps_Id", nullable = false)
-    private Integer gpsId;
+    private Long gpsId;
 
     @Column(name = "Longitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal longitude;
