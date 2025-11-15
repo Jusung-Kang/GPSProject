@@ -1,4 +1,4 @@
-package com.jskang.backend.dto;
+package com.jskang.backend.availableSports.dto;
 
 import com.jskang.backend.domain.AvailableSports;
 import lombok.Getter;

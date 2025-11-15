@@ -16,10 +16,7 @@ import java.io.Serializable;
 
 public class AvailableSportsId implements Serializable {
 
-    @Column(name = "Id", nullable = false)
     private Long id;
-
-    @Column(name = "SportId", nullable = false)
     private Long sportId;
 
 

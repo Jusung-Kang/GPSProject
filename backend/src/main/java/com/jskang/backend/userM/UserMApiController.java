@@ -1,12 +1,8 @@
-package com.jskang.backend.controller;
+package com.jskang.backend.userM;
 
-import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.UserM;
-import com.jskang.backend.dto.AvailableSportsResponseDto;
-import com.jskang.backend.dto.SaveAvailableSportsRequestDto;
-import com.jskang.backend.dto.SaveUserMRequestDto;
-import com.jskang.backend.dto.UserResponseDto;
-import com.jskang.backend.service.UserMService;
+import com.jskang.backend.userM.dto.SaveUserMRequestDto;
+import com.jskang.backend.userM.dto.UserResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +17,7 @@ public class UserMApiController {
 
     private final UserMService userMService;
 
-    @PostMapping("user")
+    @PostMapping("users")
     public ResponseEntity<UserResponseDto> createUser(@RequestBody SaveUserMRequestDto requestUser) {
 
           UserM userM = userMService.createUserM(requestUser);
@@ -33,7 +29,7 @@ public class UserMApiController {
 
     }
 
-    @PutMapping("user{id}")
+    @PutMapping("users{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
         UserM userM = userMService.updateUserM(id, requestUser);
         return ResponseEntity.ok(new UserResponseDto(userM));
@@ -51,31 +47,11 @@ public class UserMApiController {
     }
 
     @GetMapping("users/{id}")
-    public ResponseEntity<UserResponseDto> getUserMById(@PathVariable Long id) {
+    public ResponseEntity<UserResponseDto> getUserMById(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
         UserM userM = userMService.findById(id);
 
         return ResponseEntity.ok()
                 .body(new UserResponseDto(userM));
-    }
-
-    @PostMapping("user/{sportId}/sports")
-    public ResponseEntity<AvailableSportsResponseDto> createSport(@PathVariable Long sportId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
-
-        AvailableSports sport = userMService.createAvailableSports(sportId, requestSport);
-
-        AvailableSportsResponseDto availableSportsResponseDto = new AvailableSportsResponseDto(sport);
-
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .build();
-
-    }
-
-    @PutMapping("user/{userI}/sports/{sportId}")
-    public ResponseEntity<AvailableSportsResponseDto> updateSport(@PathVariable Long userId, @PathVariable Long sportId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
-        AvailableSports sport = userMService.updateAvailableSports(userId, sportId, requestSport);
-        AvailableSportsResponseDto availableSportsResponseDto = new AvailableSportsResponseDto(sport);
-        return ResponseEntity.ok()
-                .build();
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

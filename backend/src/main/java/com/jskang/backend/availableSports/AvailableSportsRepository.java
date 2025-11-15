@@ -1,4 +1,4 @@
-package com.jskang.backend.repository;
+package com.jskang.backend.availableSports;
 
 import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.AvailableSportsId;

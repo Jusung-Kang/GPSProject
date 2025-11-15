@@ -1,6 +1,7 @@
-package com.jskang.backend.dto;
+package com.jskang.backend.userM.dto;
 
 import com.jskang.backend.domain.UserM;
+import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -13,10 +14,8 @@ public class UserResponseDto {
     private final Long id;
     private final String email;
     private final String phoneNumber;
-
-    private List<AvailableSportsResponseDto> availableSports;
-
-    private int exerciseHistoryCount;
+    private final List<AvailableSportsResponseDto> availableSports;
+    private final int exerciseHistoryCount;
 
     @Builder
     public UserResponseDto(UserM userM) {

@@ -1,4 +1,4 @@
-package com.jskang.backend.repository;
+package com.jskang.backend.gpsData;
 
 import com.jskang.backend.domain.GpsData;
 import org.springframework.data.jpa.repository.JpaRepository;

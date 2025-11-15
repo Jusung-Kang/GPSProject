@@ -18,10 +18,8 @@ public class SportType {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "SportId", nullable = false)
     private Long sportId;
 
-    @Column(name = "SportNm", length = 200, nullable = false)
     private String sportNm;
 
     @OneToMany(mappedBy = "sportType", cascade = CascadeType.ALL, orphanRemoval = true)

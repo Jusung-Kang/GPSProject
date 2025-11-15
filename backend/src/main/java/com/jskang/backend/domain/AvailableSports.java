@@ -16,21 +16,19 @@ public class AvailableSports {
     // AvailableSportsId에 id, sportId 존재
     private AvailableSportsId pk;
 
-    @Column(name = "PositionCd", length = 4)
     private String positionCd;
 
-    @Column(name = "Level", length = 8)
     private String level;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("id")
-    @JoinColumn(name = "Id")
+    @JoinColumn(name = "id")
     @ToString.Exclude
     private UserM userM;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("sportId")
-    @JoinColumn(name = "SportId")
+    @JoinColumn(name = "sport_id")
     @ToString.Exclude
     private SportType sportType;
 

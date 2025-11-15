@@ -1,26 +1,25 @@
-package com.jskang.backend.service;
+package com.jskang.backend.availableSports;
 
-import org.springframework.transaction.annotation.Transactional;
-import com.jskang.backend.domain.AvailableSports;
+import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.domain.AvailableSportsId;
 import com.jskang.backend.domain.SportType;
 import com.jskang.backend.domain.UserM;
-import com.jskang.backend.dto.SaveAvailableSportsRequestDto;
-import com.jskang.backend.dto.SaveUserMRequestDto;
-import com.jskang.backend.repository.AvailableSportsRepository;
-import com.jskang.backend.repository.SportTypeRepository;
-import com.jskang.backend.repository.UserMRepository;
+import com.jskang.backend.sportType.SportTypeRepository;
+import com.jskang.backend.userM.UserMRepository;
+import org.springframework.transaction.annotation.Transactional;
+import com.jskang.backend.domain.AvailableSports;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Service
-public class UserMService {
+public class AvailableSportsService {
 
+    private final AvailableSportsRepository availableSportsRepository;
     private final UserMRepository userMRepository;
-    private final AvailableSportsRepository  availableSportsRepository;
     private final SportTypeRepository sportTypeRepository;
 
     @Transactional
@@ -36,11 +35,12 @@ public class UserMService {
 
         AvailableSports newAvailableSports = AvailableSports.builder()
                 .pk(pk)
-                .userM(userM)
                 .sportType(sports)
                 .level(requestSports.getLevel())
                 .positionCd(requestSports.getPositionCd())
                 .build();
+
+        userM.addAvailableSports(newAvailableSports);
 
         return  availableSportsRepository.save(newAvailableSports);
     }
@@ -59,34 +59,18 @@ public class UserMService {
 
     }
 
-    @Transactional
-    public UserM createUserM(SaveUserMRequestDto requestUser){
-        UserM userM = UserM.builder()
-                .email(requestUser.getEmail())
-                .phoneNumber(requestUser.getPhoneNumber())
-                .build();
-
-        return userMRepository.save(userM);
+    public List<AvailableSports> findAll(){
+        return availableSportsRepository.findAll();
     }
 
-    @Transactional
-    public UserM updateUserM(Long userId, SaveUserMRequestDto requestUser) {
-        UserM userM = userMRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 아이디의 유저가 없습니다. id=" + userId));
+    public AvailableSports findById(Long userId, Long sportId) {
 
-        userM.setEmail(requestUser.getEmail());
-        userM.setPhoneNumber(requestUser.getPhoneNumber());
-        return userM;
+        AvailableSportsId pk = new AvailableSportsId(userId, sportId);
 
-    }
+        AvailableSports availableSports = availableSportsRepository.findById(pk)
+                .orElseThrow(() -> new IllegalArgumentException("해당 스포츠가 존재하지 않습니다. id=" + sportId));
 
-    public List<UserM> findAll() {
-        return userMRepository.findAll();
-    }
-
-    public UserM findById(Long id) {
-        return userMRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+        return availableSports;
     }
 
 }

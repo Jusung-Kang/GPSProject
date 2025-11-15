@@ -17,13 +17,10 @@ public class UserM {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "Id", nullable = false)
     private Long id;
 
-    @Column(name = "Email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "PhoneNumber", length = 11, nullable = false, unique = true)
     private String phoneNumber;
 
     @OneToMany(mappedBy = "userM", cascade = CascadeType.ALL, orphanRemoval = true)

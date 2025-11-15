@@ -14,26 +14,23 @@ import java.util.List;
 @Builder
 @Entity
 @Table(name = "exercise_history")
-
 public class ExerciseHistory {
 
     @Id
-    @Column(name = "History_Id", nullable = false)
-    private Long historyId;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- 1. ID 자동 생성 어노테이션 추가
+    private Long historyId; // 'historyId'가 'history_id'로 자동 매핑
 
-    @Column(name = "Seq", nullable = false)
-    private String seq;
+    private Integer seq; // <-- 2. 'String'에서 'Integer'로 타입 수정 (DB의 INT와 일치)
 
-    @Column(name = "Dt", nullable = false)
-    private LocalDateTime dt;
+    private LocalDateTime dt; // 'dt'가 'dt'로 자동 매핑 (OK)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "Id", nullable = false)
+    @JoinColumn(name = "id", nullable = false) // DB의 'id'와 일치 (OK)
     @ToString.Exclude
     private UserM userM;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "SportId", nullable = false)
+    @JoinColumn(name = "sport_id", nullable = false) // DB의 'sport_id'와 일치 (OK)
     @ToString.Exclude
     private SportType sportType;
 
