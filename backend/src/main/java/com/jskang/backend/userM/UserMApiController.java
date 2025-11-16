@@ -47,7 +47,7 @@ public class UserMApiController {
     }
 
     @GetMapping("users/{id}")
-    public ResponseEntity<UserResponseDto> getUserMById(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
+    public ResponseEntity<UserResponseDto> getUserMById(@PathVariable Long id) {
         UserM userM = userMService.findById(id);
 
         return ResponseEntity.ok()

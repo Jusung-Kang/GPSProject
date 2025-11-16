@@ -137,3 +137,9 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 2025/11/16
 ㄴ 코드를 조금더 세션별로 나눠서 구분지었음. UserMAPI 에 AvailableSports가 생성, 업데이트가 되어있어 이걸 AvailableSportsApi를 생성하여 배치하였음.
 ㄴ JPA와 DB의 테이블, 컬럼명이 서로 바로보고 있지않아 snake로 통일시켜 Spring에 @Column을 지워버렸음.
+
+2025/11/17
+ㄴ SportType 쪽 service, controller, dto 코드 구현했음.
+ㄴ controller 부분에서 정확하게 어디서 dto를 사용해서 값을 불러오도록 해야하는지, 어디서 entity를 사용해서 값을 불러와야하는지, list를 사용해서 값을 어떻게 가져오는지 조금더 공부하고 직접 구현해봐야 할것같음.
+ㄴ 아직 정확하게 데이터가 들어가는지 테스트는 해보지 않았음. postman을 사용해서 값 넣어보면 좋을것 같다
+ㄴ 2025/11/18에는 TDD 작성하기.
