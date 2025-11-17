@@ -29,7 +29,7 @@ public class UserMApiController {
 
     }
 
-    @PutMapping("users{id}")
+    @PutMapping("users/{id}")
     public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
         UserM userM = userMService.updateUserM(id, requestUser);
         return ResponseEntity.ok(new UserResponseDto(userM));
