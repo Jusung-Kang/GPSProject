@@ -130,19 +130,22 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ 오늘의 API Design은  AvailableSports 의 save, findAll, findById 이 3가지를 구현하였다.
 ㄴ 명칭을 조금더 깔끔하게 정리할수있으면 좋을것 같다.
 
-2025/11/15
+2025/11/14
 ㄴ dto, service, domain 부분을 완전 다 바꾸게 되었다. dto는 데이터를 전달하는 깡통이 되어야 하는데 toEntity와 같이 builder를 하고 있었다. 이 부분을 service 쪽에서 json을 entity로 가공하여 db로 보낼수 있도록 수정하였다.
 ㄴ AI를 사용해서 Controller 부분 수정을 하였으나 완벅하게 이해가 가지는 않는상황이다. 
 
-2025/11/16
+2025/11/15
 ㄴ 코드를 조금더 세션별로 나눠서 구분지었음. UserMAPI 에 AvailableSports가 생성, 업데이트가 되어있어 이걸 AvailableSportsApi를 생성하여 배치하였음.
 ㄴ JPA와 DB의 테이블, 컬럼명이 서로 바로보고 있지않아 snake로 통일시켜 Spring에 @Column을 지워버렸음.
 
-2025/11/17
+2025/11/16
 ㄴ SportType 쪽 service, controller, dto 코드 구현했음.
 ㄴ controller 부분에서 정확하게 어디서 dto를 사용해서 값을 불러오도록 해야하는지, 어디서 entity를 사용해서 값을 불러와야하는지, list를 사용해서 값을 어떻게 가져오는지 조금더 공부하고 직접 구현해봐야 할것같음.
 ㄴ 아직 정확하게 데이터가 들어가는지 테스트는 해보지 않았음. postman을 사용해서 값 넣어보면 좋을것 같다
 ㄴ 2025/11/18에는 TDD 작성하기.
 
-2025/11/18
+2025/11/17
 ㄴ tdd파일을 ai를 이용해서 짜긴 했으나 아직 이해가 안가 공부를 해야함. UserM 은 Ai를 사용해서 했으나 다른부분은 공부해서 스스로 코드를 짜보면 도움이 많이 될것 같음
+
+2025/11/18
+ㄴ AvailableSports Repository쪽 tdd 구현하는 중. pk가 나와 어떻게 할지 몰라 Ai 사용하였으며 .userM(userM), .SportType(sportType)을 왜 사용해야 하는지 이해하였음.
