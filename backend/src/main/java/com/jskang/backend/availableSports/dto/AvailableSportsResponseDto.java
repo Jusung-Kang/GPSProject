@@ -7,12 +7,12 @@ import lombok.Getter;
 public class AvailableSportsResponseDto {
 
     private final String sportName;
-    private final String position;
+    private final String positionCd;
     private final String level;
 
     public AvailableSportsResponseDto(AvailableSports availableSports){
         this.sportName = availableSports.getSportType().getSportNm();
-        this.position = availableSports.getPositionCd();
+        this.positionCd = availableSports.getPositionCd();
         this.level = availableSports.getLevel();
     }
 

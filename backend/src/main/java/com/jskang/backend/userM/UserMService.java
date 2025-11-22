@@ -41,7 +41,7 @@ public class UserMService {
 
     public UserM findById(Long id) {
         return userMRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을수 없습니다"));
     }
 
 }

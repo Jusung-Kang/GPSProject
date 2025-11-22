@@ -31,7 +31,7 @@ public class AvailableSportsService {
         SportType sports = sportTypeRepository.findById(requestSports.getSportId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 스포츠를 찾을수 없습니다. id=" + requestSports.getSportId()));
 
-        AvailableSportsId pk = new AvailableSportsId(userM.getId(), sports.getSportId());
+        AvailableSportsId pk = new AvailableSportsId(userM.getUserId(), sports.getSportId());
 
         AvailableSports newAvailableSports = AvailableSports.builder()
                 .pk(pk)
@@ -67,10 +67,8 @@ public class AvailableSportsService {
 
         AvailableSportsId pk = new AvailableSportsId(userId, sportId);
 
-        AvailableSports availableSports = availableSportsRepository.findById(pk)
+        return availableSportsRepository.findById(pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 스포츠가 존재하지 않습니다. id=" + sportId));
-
-        return availableSports;
     }
 
 }

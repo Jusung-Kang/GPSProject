@@ -149,3 +149,8 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 
 2025/11/18
 ㄴ AvailableSports Repository쪽 tdd 구현하는 중. pk가 나와 어떻게 할지 몰라 Ai 사용하였으며 .userM(userM), .SportType(sportType)을 왜 사용해야 하는지 이해하였음.
+
+2025/11/22
+ㄴ AvailableSports Service쪽 tdd 구현하였음. 조금더 공부하여 나머지 tdd 작성하여 내것으로 만들면 좋을것 같음.
+ㄴ Repository에 문제있으니 체크해야함. -> mapid를 수정하여 수정된 id명을 바꿔주니 정상작동하였음
+ㄴ 2025/11/23 ApiController tdd 작성 하야함

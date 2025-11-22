@@ -1,6 +1,5 @@
 package com.jskang.backend.domain;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import lombok.*;
 
@@ -16,7 +15,7 @@ import java.io.Serializable;
 
 public class AvailableSportsId implements Serializable {
 
-    private Long id;
+    private Long userId;
     private Long sportId;
 
 

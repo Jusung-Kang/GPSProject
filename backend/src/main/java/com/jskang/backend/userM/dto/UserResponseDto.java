@@ -19,7 +19,7 @@ public class UserResponseDto {
 
     @Builder
     public UserResponseDto(UserM userM) {
-        this.id = userM.getId();
+        this.id = userM.getUserId();
         this.email = userM.getEmail();
         this.phoneNumber = userM.getPhoneNumber();
 

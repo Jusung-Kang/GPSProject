@@ -21,8 +21,8 @@ public class AvailableSports {
     private String level;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("id")
-    @JoinColumn(name = "id")
+    @MapsId("userId")
+    @JoinColumn(name = "user_id")
     @ToString.Exclude
     private UserM userM;
 

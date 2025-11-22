@@ -42,7 +42,7 @@ class UserMApiControllerTest {
         requestDto.setPhoneNumber("01012345678");
 
         UserM createdUser = UserM.builder()
-                .id(1L)
+                .userId(1L)
                 .email("test@example.com")
                 .phoneNumber("01012345678")
                 .build();
@@ -69,7 +69,7 @@ class UserMApiControllerTest {
         requestDto.setPhoneNumber("01099998888");
 
         UserM updatedUser = UserM.builder()
-                .id(userId)
+                .userId(userId)
                 .email("update@example.com")
                 .phoneNumber("01099998888")
                 .build();
@@ -78,7 +78,6 @@ class UserMApiControllerTest {
                 .willReturn(updatedUser);
 
         // when & then
-        // Controller의 @PutMapping("users/{id}") 오타가 수정되었다고 가정
         mockMvc.perform(put("/api/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
@@ -106,7 +105,7 @@ class UserMApiControllerTest {
     @DisplayName("단건 유저 조회(GET) 테스트")
     void getUserMById() throws Exception {
         Long userId = 1L;
-        UserM user = UserM.builder().id(userId).email("target@a.com").build();
+        UserM user = UserM.builder().userId(userId).email("target@a.com").build();
 
         given(userMService.findById(userId)).willReturn(user);
 

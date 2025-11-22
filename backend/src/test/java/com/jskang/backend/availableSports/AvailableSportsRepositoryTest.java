@@ -1,6 +1,5 @@
 package com.jskang.backend.availableSports;
 
-import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.AvailableSportsId;
 import com.jskang.backend.domain.SportType;
@@ -48,7 +47,7 @@ class AvailableSportsRepositoryTest {
                 .build();
         sportTypeRepository.save(sportType);
 
-        AvailableSportsId pk = new AvailableSportsId(userM.getId(), sportType.getSportId());
+        AvailableSportsId pk = new AvailableSportsId(userM.getUserId(), sportType.getSportId());
 
         AvailableSports availableSports = AvailableSports.builder()
                 .pk(pk)
@@ -63,7 +62,7 @@ class AvailableSportsRepositoryTest {
         AvailableSports found = availableSportsRepository.findById(pk)
                 .orElseThrow();
 
-        assertThat(found.getPk().getId().equals(userM.getId()));
+        assertThat(found.getPk().getUserId().equals(userM.getUserId()));
         assertThat(found.getPk().getSportId().equals(sportType.getSportId()));
         assertThat(found.getLevel()).isEqualTo("1");
         assertThat(found.getPositionCd()).isEqualTo("1");
@@ -93,7 +92,7 @@ class AvailableSportsRepositoryTest {
         sportTypeRepository.save(sportType2);
 
         AvailableSports availableSports1 = AvailableSports.builder()
-                .pk(new AvailableSportsId(userM.getId(), sportType1.getSportId()))
+                .pk(new AvailableSportsId(userM.getUserId(), sportType1.getSportId()))
                 .userM(userM)
                 .sportType(sportType1)
                 .level("1")
@@ -101,7 +100,7 @@ class AvailableSportsRepositoryTest {
                 .build();
 
         AvailableSports availableSports2 = AvailableSports.builder()
-                .pk(new AvailableSportsId(userM.getId(), sportType2.getSportId()))
+                .pk(new AvailableSportsId(userM.getUserId(), sportType2.getSportId()))
                 .userM(userM)
                 .sportType(sportType2)
                 .level("2")
