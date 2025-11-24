@@ -2,7 +2,6 @@ package com.jskang.backend.userM;
 
 import com.jskang.backend.domain.UserM;
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
-import jdk.jfr.Frequency;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -40,9 +40,9 @@ public class SportTypeApiController {
     }
 
     @GetMapping("sportTypes")
-    public ResponseEntity<List<SportTypeResponseDto>> getSportTypeAll() {
+    public ResponseEntity<List<SportTypeResponseDto>> findAll() {
 
-        List<SportTypeResponseDto> responseSportType = sportTypeService.findSportTypeAll()
+        List<SportTypeResponseDto> responseSportType = sportTypeService.findAll()
                 .stream()
                 .map(SportTypeResponseDto::new)
                 .toList();
@@ -52,7 +52,7 @@ public class SportTypeApiController {
     }
 
     @GetMapping("sportTypes/{sportId}")
-    public ResponseEntity<SportTypeResponseDto> getSportType(@PathVariable Long sportId) {
+    public ResponseEntity<SportTypeResponseDto> findById(@PathVariable Long sportId) {
         SportType sportType = sportTypeService.findById(sportId);
 
         return ResponseEntity.ok()

@@ -154,3 +154,7 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ AvailableSports Service쪽 tdd 구현하였음. 조금더 공부하여 나머지 tdd 작성하여 내것으로 만들면 좋을것 같음.
 ㄴ Repository에 문제있으니 체크해야함. -> mapid를 수정하여 수정된 id명을 바꿔주니 정상작동하였음
 ㄴ 2025/11/23 ApiController tdd 작성 하야함
+
+2025/11/24
+ㄴ AvailableSports, SportType, UserM tdd 작성 완료 하였음.
+ㄴ Exercise History Service, Api Controller 만들고 있는중. Many to one 이 엮겨있어 한번더 정확히 집고 넘어가면 좋을듯 함

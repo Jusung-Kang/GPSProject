@@ -25,7 +25,7 @@ public class ExerciseHistory {
     private LocalDateTime dt; // 'dt'가 'dt'로 자동 매핑 (OK)
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id", nullable = false) // DB의 'id'와 일치 (OK)
+    @JoinColumn(name = "user_id", nullable = false) // DB의 'id'와 일치 (OK)
     @ToString.Exclude
     private UserM userM;
 

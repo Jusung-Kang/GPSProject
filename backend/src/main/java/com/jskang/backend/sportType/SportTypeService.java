@@ -38,7 +38,7 @@ public class SportTypeService {
 
     }
 
-    public List<SportType> findSportTypeAll(){
+    public List<SportType> findAll(){
 
         return sportTypeRepository.findAll();
     }
