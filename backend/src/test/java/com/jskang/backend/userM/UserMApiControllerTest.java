@@ -3,6 +3,7 @@ package com.jskang.backend.userM;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jskang.backend.domain.UserM;
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
+import com.jskang.backend.userM.dto.UserMResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,8 +47,12 @@ class UserMApiControllerTest {
                 .phoneNumber("01012345678")
                 .build();
 
-        given(userMService.createUserM(any(SaveUserMRequestDto.class)))
-                .willReturn(createdUser);
+
+
+        UserMResponseDto response = new UserMResponseDto(createdUser);
+
+        given(userMService.create(any(SaveUserMRequestDto.class)))
+                .willReturn(response);
 
         // when & then
         mockMvc.perform(post("/api/users")
@@ -73,15 +78,17 @@ class UserMApiControllerTest {
                 .phoneNumber("01099998888")
                 .build();
 
-        given(userMService.updateUserM(eq(userId), any(SaveUserMRequestDto.class)))
-                .willReturn(updatedUser);
+        UserMResponseDto responseDto = new UserMResponseDto(updatedUser);
+
+        given(userMService.update(eq(userId), any(SaveUserMRequestDto.class)))
+                .willReturn(responseDto);
 
         // when & then
          mockMvc.perform(put("/api/users/{id}", userId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.email").value("update@example.com"));
+                .andExpect(jsonPath("$.email").value(responseDto.getEmail()));
     }
 
     @Test
@@ -92,7 +99,9 @@ class UserMApiControllerTest {
                 UserM.builder().email("b@b.com").build()
         );
 
-        given(userMService.findAll()).willReturn(users);
+        List<UserMResponseDto> response = com.jskang.backend.userM.dto.UserMResponseDto.from(users);
+
+        given(userMService.findAll()).willReturn(response);
 
         mockMvc.perform(get("/api/users"))
                 .andExpect(status().isOk())
@@ -106,7 +115,9 @@ class UserMApiControllerTest {
         Long userId = 1L;
         UserM user = UserM.builder().userId(userId).email("target@a.com").build();
 
-        given(userMService.findById(userId)).willReturn(user);
+        UserMResponseDto response = new UserMResponseDto(user);
+
+        given(userMService.findById(userId)).willReturn(response);
 
         mockMvc.perform(get("/api/users/{id}", userId))
                 .andExpect(status().isOk())

@@ -1,6 +1,7 @@
 package com.jskang.backend.userM;
 
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
+import com.jskang.backend.userM.dto.UserMResponseDto;
 import org.springframework.transaction.annotation.Transactional;
 import com.jskang.backend.domain.UserM;
 import lombok.RequiredArgsConstructor;
@@ -15,33 +16,41 @@ public class UserMService {
     private final UserMRepository userMRepository;
 
     @Transactional
-    public UserM createUserM(SaveUserMRequestDto requestUser){
-        UserM userM = UserM.builder()
+    public UserMResponseDto create(SaveUserMRequestDto requestUser){
+
+        UserM newUserM = UserM.builder()
                 .email(requestUser.getEmail())
                 .phoneNumber(requestUser.getPhoneNumber())
                 .build();
 
-        return userMRepository.save(userM);
+        UserM userM = userMRepository.save(newUserM);
+
+        return new UserMResponseDto(userM);
     }
 
     @Transactional
-    public UserM updateUserM(Long userId, SaveUserMRequestDto requestUser) {
+    public UserMResponseDto update(Long userId, SaveUserMRequestDto requestUser) {
         UserM userM = userMRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 아이디의 유저가 없습니다. id=" + userId));
 
-        userM.setEmail(requestUser.getEmail());
-        userM.setPhoneNumber(requestUser.getPhoneNumber());
-        return userM;
+        userM.updateContactInfo(requestUser.getEmail(), requestUser.getPhoneNumber());
+        return new UserMResponseDto(userM);
 
     }
 
-    public List<UserM> findAll() {
-        return userMRepository.findAll();
+    public List<UserMResponseDto> findAll() {
+
+        List<UserM> userM = userMRepository.findAll();
+
+        return UserMResponseDto.from(userM);
     }
 
-    public UserM findById(Long id) {
-        return userMRepository.findById(id)
+    public UserMResponseDto findById(Long userId) {
+
+        UserM userM = userMRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을수 없습니다"));
+
+        return new UserMResponseDto(userM);
     }
 
 }

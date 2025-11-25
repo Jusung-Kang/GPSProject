@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -21,7 +20,6 @@ public class ExerciseHistory {
     private Long historyId; // 'historyId'가 'history_id'로 자동 매핑
 
     private Integer seq; // <-- 2. 'String'에서 'Integer'로 타입 수정 (DB의 INT와 일치)
-
     private LocalDateTime dt; // 'dt'가 'dt'로 자동 매핑 (OK)
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -42,5 +40,13 @@ public class ExerciseHistory {
     public void addGpsData(GpsData gpsData){
         this.gpsDataList.add(gpsData);
         gpsData.setExerciseHistory(this);
+    }
+
+    public void setUserM(UserM userM) {
+        this.userM = userM;
+    }
+
+    public void changeSportType(SportType sportType) {
+        this.sportType = sportType;
     }
 }

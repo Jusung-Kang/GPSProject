@@ -2,7 +2,7 @@ package com.jskang.backend.userM;
 
 import com.jskang.backend.domain.UserM;
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
-import com.jskang.backend.userM.dto.UserResponseDto;
+import com.jskang.backend.userM.dto.UserMResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,40 +18,40 @@ public class UserMApiController {
     private final UserMService userMService;
 
     @PostMapping("users")
-    public ResponseEntity<UserResponseDto> createUser(@RequestBody SaveUserMRequestDto requestUser) {
+    public ResponseEntity<UserMResponseDto> create(@RequestBody SaveUserMRequestDto requestUser) {
 
-          UserM userM = userMService.createUserM(requestUser);
-
-          UserResponseDto userResponseDto = new UserResponseDto(userM);
+          UserMResponseDto response = userMService.create(requestUser);
 
           return ResponseEntity.status(HttpStatus.CREATED)
-                  .body(userResponseDto);
+                  .body(response);
 
     }
 
     @PutMapping("users/{id}")
-    public ResponseEntity<UserResponseDto> updateUser(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
-        UserM userM = userMService.updateUserM(id, requestUser);
-        return ResponseEntity.ok(new UserResponseDto(userM));
+    public ResponseEntity<UserMResponseDto> update(@PathVariable Long id, @RequestBody SaveUserMRequestDto requestUser) {
+
+        UserMResponseDto userM = userMService.update(id, requestUser);
+
+        return ResponseEntity.ok(userM);
+
     }
 
     @GetMapping("users")
-    public ResponseEntity<List<UserResponseDto>> getAllUserM() {
-        List<UserResponseDto> getUsersAll = userMService.findAll()
-                .stream()
-                .map(UserResponseDto::new)
-                .toList();
+    public ResponseEntity<List<UserMResponseDto>> findAll() {
+        List<UserMResponseDto> findAll =  userMService.findAll();
 
         return ResponseEntity.ok()
-                .body(getUsersAll);
+                .body(findAll);
     }
 
     @GetMapping("users/{id}")
-    public ResponseEntity<UserResponseDto> getUserMById(@PathVariable Long id) {
-        UserM userM = userMService.findById(id);
+    public ResponseEntity<UserMResponseDto> findById(@PathVariable Long id) {
+
+
+        UserMResponseDto response = userMService.findById(id);
 
         return ResponseEntity.ok()
-                .body(new UserResponseDto(userM));
+                .body(response);
     }
 
     @ExceptionHandler(IllegalArgumentException.class)

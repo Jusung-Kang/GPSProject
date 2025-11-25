@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
-public class UserResponseDto {
+public class UserMResponseDto {
 
-    private final Long id;
+    private final Long userId;
     private final String email;
     private final String phoneNumber;
     private final List<AvailableSportsResponseDto> availableSports;
     private final int exerciseHistoryCount;
 
     @Builder
-    public UserResponseDto(UserM userM) {
-        this.id = userM.getUserId();
+    public UserMResponseDto(UserM userM) {
+        this.userId = userM.getUserId();
         this.email = userM.getEmail();
         this.phoneNumber = userM.getPhoneNumber();
 
@@ -29,5 +29,10 @@ public class UserResponseDto {
         this.exerciseHistoryCount = userM.getExerciseHistory().size();
     }
 
+    public static List<UserMResponseDto> from(List<UserM> entities) {
+        return entities.stream()
+                .map(UserMResponseDto::new)
+                .toList();
+    }
 
 }

@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -31,6 +30,11 @@ public class UserM {
     @Builder.Default
     @ToString.Exclude
     private Set<ExerciseHistory> exerciseHistory = new HashSet<>();
+
+    public void updateContactInfo(String email, String phoneNumber){
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
 
     public void addAvailableSports(AvailableSports availableSports) {
         this.availableSports.add(availableSports);

@@ -12,7 +12,6 @@ import java.io.Serializable;
 @EqualsAndHashCode // 복합 키 클래스는 equals와 hashCode 구현이 필수
 @Embeddable
 
-
 public class AvailableSportsId implements Serializable {
 
     private Long userId;

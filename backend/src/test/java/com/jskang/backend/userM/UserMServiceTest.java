@@ -2,6 +2,7 @@ package com.jskang.backend.userM;
 
 import com.jskang.backend.domain.UserM;
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
+import com.jskang.backend.userM.dto.UserMResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -41,7 +42,7 @@ class UserMServiceTest {
                 .willAnswer(invocation -> invocation.getArgument(0));
 
         // when
-        userMService.createUserM(requestDto);
+        userMService.create(requestDto);
 
         ArgumentCaptor<UserM> captor = ArgumentCaptor.forClass(UserM.class);
         verify(userMRepository).save(captor.capture());
@@ -75,7 +76,7 @@ class UserMServiceTest {
         given(userMRepository.findById(userId)).willReturn(Optional.of(existingUser));
 
         // when
-        userMService.updateUserM(userId, updateDto);
+        userMService.update(userId, updateDto);
 
         // then
         // 이제 DTO에 값이 들어갔으므로 updatedUser의 값도 변경되어 있어야 합니다.
@@ -95,7 +96,7 @@ class UserMServiceTest {
 
         // when & then
         // 예외가 발생하는지 검증
-        assertThatThrownBy(() -> userMService.updateUserM(wrongId, requestDto))
+        assertThatThrownBy(() -> userMService.update(wrongId, requestDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("해당 아이디의 유저가 없습니다");
     }
@@ -114,7 +115,7 @@ class UserMServiceTest {
         given(userMRepository.findAll()).willReturn(List.of(u1, u2));
 
         // when
-        List<UserM> list = userMService.findAll();
+        List<UserMResponseDto> list = userMService.findAll();
 
         // then
         assertThat(list).hasSize(2);
@@ -139,7 +140,7 @@ class UserMServiceTest {
         given(userMRepository.findById(userId)).willReturn(Optional.of(user));
 
         // when
-        UserM result = userMService.findById(userId);
+        UserMResponseDto result = userMService.findById(userId);
 
         // then
         assertThat(result.getUserId()).isEqualTo(userId);
