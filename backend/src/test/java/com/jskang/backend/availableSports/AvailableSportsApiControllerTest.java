@@ -2,6 +2,7 @@ package com.jskang.backend.availableSports;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
+import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.AvailableSportsId;
@@ -11,6 +12,7 @@ import com.jskang.backend.sportType.SportTypeService;
 import com.jskang.backend.sportType.dto.SaveSportTypeRequestDto;
 import com.jskang.backend.userM.UserMService;
 import com.jskang.backend.userM.dto.SaveUserMRequestDto;
+import com.jskang.backend.userM.dto.UserMResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,9 +65,11 @@ class AvailableSportsApiControllerTest {
                 .sportType(SportType.builder().sportId(sportId).build())
                 .build();
 
+        AvailableSportsResponseDto response = new AvailableSportsResponseDto(mockEntity);
+
         //service 사용하여 가능한 운동 생성
-        given(availableSportsService.createAvailableSports(eq(userId), any(SaveAvailableSportsRequestDto.class)))
-                .willReturn(mockEntity);
+        given(availableSportsService.create(eq(userId), any(SaveAvailableSportsRequestDto.class)))
+                .willReturn(response);
 
         mockMvc.perform(post("/api/users/{userId}/sports", userId)
                     .contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +100,7 @@ class AvailableSportsApiControllerTest {
                         .sportType(SportType.builder().sportId(sportId).build())
                         .build();
 
-        given(availableSportsService.updateAvailableSports(eq(userId), eq(sportId), any(SaveAvailableSportsRequestDto.class)))
+        given(availableSportsService.update(eq(userId), eq(sportId), any(SaveAvailableSportsRequestDto.class)))
                 .willReturn(mockEntity);
 
         mockMvc.perform(put("/api/users/{userId}/sports/{sportId}", userId, sportId)
@@ -134,7 +138,9 @@ class AvailableSportsApiControllerTest {
                         .build()
         );
 
-        given(availableSportsService.findAll()).willReturn(mockEntity);
+        List<AvailableSportsResponseDto> response = AvailableSportsResponseDto.from(mockEntity);
+
+        given(availableSportsService.findAll()).willReturn(response);
 
         mockMvc.perform(get("/api/sports"))
                 .andExpect(status().isOk())

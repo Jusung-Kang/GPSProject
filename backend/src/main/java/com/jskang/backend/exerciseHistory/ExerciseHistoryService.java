@@ -46,7 +46,7 @@ public class ExerciseHistoryService {
     }
 
     @Transactional
-    public ExerciseHistoryResponseDto update(Long historyId,  SaveExerciseHistoryRequestDto requestDto) {
+    public ExerciseHistoryResponseDto update(Long historyId, SaveExerciseHistoryRequestDto requestDto) {
 
         ExerciseHistory history = exerciseHistoryRepository.findById(historyId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보를 찾을수 없습니다."));
@@ -60,7 +60,7 @@ public class ExerciseHistoryService {
 
     }
 
-    public List<ExerciseHistoryResponseDto> findAll(){
+    public List<ExerciseHistoryResponseDto> findAll() {
 
         List<ExerciseHistory> exerciseHistoryList = exerciseHistoryRepository.findAllWithFetchJoin();
 
@@ -74,7 +74,6 @@ public class ExerciseHistoryService {
 
         return new ExerciseHistoryResponseDto(exerciseHistory);
     }
-
 
 
 }

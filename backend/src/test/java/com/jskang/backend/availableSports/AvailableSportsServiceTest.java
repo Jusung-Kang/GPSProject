@@ -1,5 +1,6 @@
 package com.jskang.backend.availableSports;
 
+import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.AvailableSportsId;
@@ -62,7 +63,7 @@ class AvailableSportsServiceTest {
                 .willAnswer(invocation -> invocation.getArgument(0));
 
         // 3. [When] 실행
-        availableSportsService.createAvailableSports(userId, requestDto);
+        availableSportsService.create(userId, requestDto);
 
         // 4. [Then] ArgumentCaptor로 낚아채서 검증
         // 캡쳐 도구 생성
@@ -100,7 +101,7 @@ class AvailableSportsServiceTest {
 
         given(availableSportsRepository.findById(new AvailableSportsId(userId, sportId))).willReturn(Optional.of(existing));
 
-        availableSportsService.updateAvailableSports(userId, sportId, requestDto);
+        availableSportsService.update(userId, sportId, requestDto);
 
         assertThat(existing.getLevel()).isEqualTo(requestDto.getLevel());
         assertThat(existing.getPositionCd()).isEqualTo(requestDto.getPositionCd());
@@ -118,7 +119,7 @@ class AvailableSportsServiceTest {
 
         given(availableSportsRepository.findById(wrongPk)).willReturn(Optional.empty());
 
-        assertThatThrownBy(() -> availableSportsService.updateAvailableSports(wrongUserId, wrongSportId, requestDto))
+        assertThatThrownBy(() -> availableSportsService.update(wrongUserId, wrongSportId, requestDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("해당 정보를 찾을수 없습니다.");
     }
@@ -137,7 +138,7 @@ class AvailableSportsServiceTest {
 
         given(availableSportsRepository.findAll()).willReturn(List.of(sport1, sport2));
 
-        List<AvailableSports> list = availableSportsService.findAll();
+        List<AvailableSportsResponseDto> list = availableSportsService.findAll();
 
         assertThat(list).hasSize(2);
         assertThat(list).extracting("level")

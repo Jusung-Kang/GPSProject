@@ -1,5 +1,6 @@
 package com.jskang.backend.availableSports;
 
+import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.domain.AvailableSportsId;
 import com.jskang.backend.domain.SportType;
@@ -23,7 +24,7 @@ public class AvailableSportsService {
     private final SportTypeRepository sportTypeRepository;
 
     @Transactional
-    public AvailableSports createAvailableSports(Long userId, SaveAvailableSportsRequestDto requestSports) {
+    public AvailableSportsResponseDto create(Long userId, SaveAvailableSportsRequestDto requestSports) {
 
         UserM userM = userMRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을수 없습니다. id=" + userId));
@@ -42,25 +43,29 @@ public class AvailableSportsService {
 
         userM.addAvailableSports(newAvailableSports);
 
-        return  availableSportsRepository.save(newAvailableSports);
+        availableSportsRepository.save(newAvailableSports);
+
+        return new AvailableSportsResponseDto(newAvailableSports) ;
     }
 
     @Transactional
-    public AvailableSports updateAvailableSports(Long userId, Long sportId,  SaveAvailableSportsRequestDto requestSports) {
+    public AvailableSports update(Long userId, Long sportId,  SaveAvailableSportsRequestDto requestSports) {
 
         AvailableSportsId pk = new AvailableSportsId(userId, sportId);
         AvailableSports sports = availableSportsRepository.findById(pk)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보를 찾을수 없습니다."));
 
-        sports.setLevel(requestSports.getLevel());
-        sports.setPositionCd(requestSports.getPositionCd());
+        sports.changeAvailableInfo(requestSports.getLevel(), requestSports.getPositionCd());
 
         return sports;
 
     }
 
-    public List<AvailableSports> findAll(){
-        return availableSportsRepository.findAll();
+    public List<AvailableSportsResponseDto> findAll(){
+
+        List<AvailableSports> list = availableSportsRepository.findAll();
+
+        return AvailableSportsResponseDto.from(list);
     }
 
     public AvailableSports findById(Long userId, Long sportId) {

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Getter
-@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -31,5 +30,15 @@ public class AvailableSports {
     @JoinColumn(name = "sport_id")
     @ToString.Exclude
     private SportType sportType;
+
+    public void setUserM(UserM userM) {
+        this.userM = userM;
+    }
+
+    public void changeAvailableInfo(String level, String positionCd) {
+        this.level = level;
+        this.positionCd = positionCd;
+    }
+
 
 }

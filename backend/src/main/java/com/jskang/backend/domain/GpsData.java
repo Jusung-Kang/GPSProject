@@ -27,6 +27,8 @@ public class GpsData {
 
     private BigDecimal speed;
 
+    private Integer heartRate;
+
     private int gpsSeq;
 
     @ManyToOne(fetch = FetchType.LAZY)

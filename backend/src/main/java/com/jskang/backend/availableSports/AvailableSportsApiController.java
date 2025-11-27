@@ -19,11 +19,9 @@ public class AvailableSportsApiController {
 
 
     @PostMapping("users/{userId}/sports")
-    public ResponseEntity<AvailableSportsResponseDto> createSport(@PathVariable Long userId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
+    public ResponseEntity<AvailableSportsResponseDto> create(@PathVariable Long userId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
 
-        AvailableSports sport = availableSportsService.createAvailableSports(userId, requestSport);
-
-        AvailableSportsResponseDto availableSportsResponseDto = new AvailableSportsResponseDto(sport);
+        AvailableSportsResponseDto availableSportsResponseDto = availableSportsService.create(userId, requestSport);
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(availableSportsResponseDto);
@@ -31,9 +29,9 @@ public class AvailableSportsApiController {
     }
 
     @PutMapping("users/{userId}/sports/{sportId}")
-    public ResponseEntity<AvailableSportsResponseDto> updateSport(@PathVariable Long userId, @PathVariable Long sportId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
+    public ResponseEntity<AvailableSportsResponseDto> update(@PathVariable Long userId, @PathVariable Long sportId, @RequestBody SaveAvailableSportsRequestDto requestSport) {
 
-        AvailableSports sport = availableSportsService.updateAvailableSports(userId, sportId, requestSport);
+        AvailableSports sport = availableSportsService.update(userId, sportId, requestSport);
         AvailableSportsResponseDto availableSportsResponseDto = new AvailableSportsResponseDto(sport);
         return ResponseEntity.ok()
                 .body(availableSportsResponseDto);
@@ -41,19 +39,16 @@ public class AvailableSportsApiController {
     }
 
     @GetMapping("sports")
-    public ResponseEntity<List<AvailableSportsResponseDto>> getSportAll(){
+    public ResponseEntity<List<AvailableSportsResponseDto>> findAll(){
 
-        List<AvailableSportsResponseDto> responseSports = availableSportsService.findAll()
-                .stream()
-                .map(AvailableSportsResponseDto::new)
-                .toList();
+        List<AvailableSportsResponseDto> responseSports = availableSportsService.findAll();
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(responseSports);
     }
 
     @GetMapping("users/{userId}/sports/{sportId}")
-    public ResponseEntity<AvailableSportsResponseDto> getSportById(@PathVariable Long userId, @PathVariable Long sportId) {
+    public ResponseEntity<AvailableSportsResponseDto> findById(@PathVariable Long userId, @PathVariable Long sportId) {
 
         AvailableSports sport = availableSportsService.findById(userId, sportId);
 
