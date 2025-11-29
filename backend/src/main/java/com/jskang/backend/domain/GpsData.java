@@ -25,7 +25,11 @@ public class GpsData {
 
     private BigDecimal distance;
 
+    private BigDecimal max_distance;
+
     private BigDecimal speed;
+
+    private BigDecimal maxSpeed;
 
     private Integer heartRate;
 

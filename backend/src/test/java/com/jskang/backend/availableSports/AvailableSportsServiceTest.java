@@ -99,7 +99,8 @@ class AvailableSportsServiceTest {
                 .positionCd("수비")
                 .build();
 
-        given(availableSportsRepository.findById(new AvailableSportsId(userId, sportId))).willReturn(Optional.of(existing));
+        given(availableSportsRepository.findById(new AvailableSportsId(userId, sportId)))
+                .willReturn(Optional.of(existing));
 
         availableSportsService.update(userId, sportId, requestDto);
 
@@ -128,12 +129,18 @@ class AvailableSportsServiceTest {
     @DisplayName("전체 조회(FindAll) 테스트")
     void findAll() {
 
+        SportType sportType = SportType.builder()
+                .sportNm("축구")
+                .build();
+
         // given
         AvailableSports sport1 = AvailableSports.builder()
                 .level("1")
+                .sportType(sportType)
                 .build();
         AvailableSports sport2 = AvailableSports.builder()
                 .level("2")
+                .sportType(sportType)
                 .build();
 
         given(availableSportsRepository.findAll()).willReturn(List.of(sport1, sport2));

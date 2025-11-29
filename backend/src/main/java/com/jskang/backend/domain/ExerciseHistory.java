@@ -16,19 +16,21 @@ import java.util.List;
 public class ExerciseHistory {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // <-- 1. ID 자동 생성 어노테이션 추가
-    private Long historyId; // 'historyId'가 'history_id'로 자동 매핑
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "history_id")
+    private Long historyId;
 
-    private Integer seq; // <-- 2. 'String'에서 'Integer'로 타입 수정 (DB의 INT와 일치)
-    private LocalDateTime dt; // 'dt'가 'dt'로 자동 매핑 (OK)
+    private Integer seq;
+
+    private LocalDateTime dt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false) // DB의 'id'와 일치 (OK)
+    @JoinColumn(name = "user_id", nullable = false)
     @ToString.Exclude
     private UserM userM;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sport_id", nullable = false) // DB의 'sport_id'와 일치 (OK)
+    @JoinColumn(name = "sport_id", nullable = false)
     @ToString.Exclude
     private SportType sportType;
 

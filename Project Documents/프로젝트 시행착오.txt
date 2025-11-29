@@ -163,3 +163,7 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ Controller -> Service SaveRequestDto, Service -> Controller ResponseDto 이렇게 값을 들고올수 있도록. 즉 바로 repository를 return 하지 않도록 수정하기.
 ㄴ UserM은 Dto로 데이터를 보내는것으로 수정해두었으니 참고하여 바꾸면 될것같다. 
 ㄴ n+1 문제 더 확실하게 경험해보기. 말로만 듣지말고 직접 그 문제를 직면하면 더 잘 이해를 할것같으니 일부러 n+1 문제를 내보는것도 괜찮다고 생각한다.
+
+2025/11/30
+ㄴ service tdd 작성중인데 아직 정확하게 이해를 못하고 구현하는것 같음. 조금더 기초를 공부하고 ai 사용을 최소화 하고 문제를 해결해보려 해야할것같음. 
+ㄴ exercisehistory service tdd 공부 다시하기, controller tdd 작성하기
