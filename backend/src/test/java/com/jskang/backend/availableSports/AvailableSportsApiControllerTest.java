@@ -1,18 +1,12 @@
 package com.jskang.backend.availableSports;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializerProvider;
 import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
 import com.jskang.backend.domain.AvailableSports;
 import com.jskang.backend.domain.AvailableSportsId;
 import com.jskang.backend.domain.SportType;
 import com.jskang.backend.domain.UserM;
-import com.jskang.backend.sportType.SportTypeService;
-import com.jskang.backend.sportType.dto.SaveSportTypeRequestDto;
-import com.jskang.backend.userM.UserMService;
-import com.jskang.backend.userM.dto.SaveUserMRequestDto;
-import com.jskang.backend.userM.dto.UserMResponseDto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

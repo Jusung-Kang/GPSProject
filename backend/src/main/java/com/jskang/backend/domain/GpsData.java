@@ -6,7 +6,6 @@ import lombok.*;
 import java.math.BigDecimal;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -23,9 +22,11 @@ public class GpsData {
 
     private BigDecimal latitude;
 
+    private BigDecimal altitude;
+
     private BigDecimal distance;
 
-    private BigDecimal max_distance;
+    private BigDecimal maxDistance;
 
     private BigDecimal speed;
 
@@ -39,5 +40,10 @@ public class GpsData {
     @JoinColumn(name = "history_id", nullable = false)
     @ToString.Exclude
     private ExerciseHistory exerciseHistory;
+
+    public void setMaxRecord(BigDecimal maxDistance,  BigDecimal maxSpeed) {
+        this.maxDistance = maxDistance;
+        this.maxSpeed = maxSpeed;
+    }
 
 }
