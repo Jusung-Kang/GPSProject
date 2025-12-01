@@ -22,7 +22,7 @@ public class GpsDataResponseDto {
         this.longitude = gpsData.getLongitude();
         this.latitude = gpsData.getLatitude();
         this.distance = gpsData.getDistance();
-        this.max_distance = gpsData.getMax_distance();
+        this.max_distance = gpsData.getMaxDistance();
         this.speed = gpsData.getSpeed();
         this.maxSpeed = gpsData.getMaxSpeed();
         this.heartRate = gpsData.getHeartRate();

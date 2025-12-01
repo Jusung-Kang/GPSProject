@@ -36,12 +36,11 @@ public class AvailableSportsService {
 
         AvailableSports newAvailableSports = AvailableSports.builder()
                 .pk(pk)
+                .userM(userM)
                 .sportType(sports)
                 .level(requestSports.getLevel())
                 .positionCd(requestSports.getPositionCd())
                 .build();
-
-        userM.addAvailableSports(newAvailableSports);
 
         availableSportsRepository.save(newAvailableSports);
 

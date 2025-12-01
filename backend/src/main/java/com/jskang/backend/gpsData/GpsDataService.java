@@ -37,6 +37,9 @@ public class GpsDataService {
                 .build();
 
         GpsData saved = gpsDataRepository.save(gps);
+
+
+
         GpsDataResponseDto response = new GpsDataResponseDto(saved);
 
         return response;

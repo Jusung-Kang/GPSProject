@@ -41,6 +41,10 @@ public class GpsData {
     @ToString.Exclude
     private ExerciseHistory exerciseHistory;
 
+    public void setExerciseHistory(ExerciseHistory exerciseHistory) {
+        this.exerciseHistory = exerciseHistory;
+    }
+
     public void setMaxRecord(BigDecimal maxDistance,  BigDecimal maxSpeed) {
         this.maxDistance = maxDistance;
         this.maxSpeed = maxSpeed;

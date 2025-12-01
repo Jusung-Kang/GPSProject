@@ -173,3 +173,9 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ 전체적으로 데이터 넣으면서 테스트 해보고 설계 한번 다시 생각 하고 넘어가야할것같음.
 ㄴ tdd의 개념을 더 확실하게 잡고 가야 할것같음. 
 ㄴ gpsdatarepository 에 작성한 findallbyexercisehistory_historyid <- exercisehistory 도메인에 있는 해당 클래스 이름과 id값을 마지막에 넣어주어야 JPA에서 알아서 쿼리 작성을 함.
+
+2025/12/01
+ㄴ repository, service tdd 작성함
+ㄴ 개념은 이해했음. requestDto는 client로부터 오는것, entity는 저장될 값. willReturn으로 entity를 설정하고 save, fine 된 값과 requestDto 와 비교. 
+ㄴ controller tdd에 대해 조금더 이해해야할것 같음.
+ㄴ service create tdd에서 사용하는 argumentcapture에 대해서 더 이해를 해야할것 같음. 
