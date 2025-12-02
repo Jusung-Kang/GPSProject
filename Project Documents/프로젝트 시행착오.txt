@@ -179,3 +179,6 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 ㄴ 개념은 이해했음. requestDto는 client로부터 오는것, entity는 저장될 값. willReturn으로 entity를 설정하고 save, fine 된 값과 requestDto 와 비교. 
 ㄴ controller tdd에 대해 조금더 이해해야할것 같음.
 ㄴ service create tdd에서 사용하는 argumentcapture에 대해서 더 이해를 해야할것 같음. 
+
+2025/12/02
+ㄴ controller tdd 작성하였고 이제 기본지식은 잡고 이해하기 시작하였음. 

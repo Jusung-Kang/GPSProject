@@ -11,8 +11,9 @@ public class GpsDataResponseDto {
 
     private BigDecimal longitude;
     private BigDecimal latitude;
+    private BigDecimal altitude;
     private BigDecimal distance;
-    private BigDecimal max_distance;
+    private BigDecimal maxDistance;
     private BigDecimal speed;
     private BigDecimal maxSpeed;
     private Integer heartRate;
@@ -21,8 +22,9 @@ public class GpsDataResponseDto {
     public GpsDataResponseDto(GpsData gpsData) {
         this.longitude = gpsData.getLongitude();
         this.latitude = gpsData.getLatitude();
+        this.altitude = gpsData.getAltitude();
         this.distance = gpsData.getDistance();
-        this.max_distance = gpsData.getMaxDistance();
+        this.maxDistance = gpsData.getMaxDistance();
         this.speed = gpsData.getSpeed();
         this.maxSpeed = gpsData.getMaxSpeed();
         this.heartRate = gpsData.getHeartRate();
