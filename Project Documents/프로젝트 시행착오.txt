@@ -182,3 +182,8 @@ Postman을 사용하여 Users를 Get 하려고 했지만 이미 들어가 있는
 
 2025/12/02
 ㄴ controller tdd 작성하였고 이제 기본지식은 잡고 이해하기 시작하였음. 
+
+2025/12/07
+ㄴ 수정사항: gpsdata에 있던 maxdistance, maxspeed -> exercisehistory로 이동. max 데이터 뿐만아니라 total, average도 생성. 
+	ㄴ avaliablesport에 있던 positioncd를 positionId로 수정하면서 positionM 테이블 생성하여 name을 가져다 사용할수 있도록 함.
+ㄴ positionM: repository, service, controller 생성하였으나 tdd 생성 해야함. 
