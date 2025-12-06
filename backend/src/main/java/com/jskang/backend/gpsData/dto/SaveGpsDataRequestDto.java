@@ -13,9 +13,7 @@ public class SaveGpsDataRequestDto {
     private BigDecimal latitude;
     private BigDecimal altitude;
     private BigDecimal distance;
-    private BigDecimal maxDistance;
     private BigDecimal speed;
-    private BigDecimal maxSpeed;
     private Integer heartRate;
     private Integer gpsSeq;
 

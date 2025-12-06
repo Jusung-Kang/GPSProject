@@ -8,7 +8,8 @@ import lombok.Setter;
 public class SaveAvailableSportsRequestDto {
 
     private String level;
-    private String positionCd;
+    private Long positionId;
+    private String positionNm;
     private Long sportId;
 
 }

@@ -3,6 +3,7 @@ package com.jskang.backend.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,8 +22,11 @@ public class ExerciseHistory {
     private Long historyId;
 
     private Integer seq;
-
     private LocalDateTime dt;
+    private BigDecimal totalDistance;
+    private Long totalTime;
+    private BigDecimal averagePace;
+    private BigDecimal maxSpeed;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -39,9 +43,22 @@ public class ExerciseHistory {
     @ToString.Exclude
     private List<GpsData> gpsDataList = new ArrayList<>();
 
-    public void addGpsData(GpsData gpsData){
+    public void addGpsData(GpsData gpsData) {
         this.gpsDataList.add(gpsData);
         gpsData.setExerciseHistory(this);
+    }
+
+    public void changeTotalData(BigDecimal totalDistance, Long totalTime) {
+        this.totalDistance = totalDistance;
+        this.totalTime = totalTime;
+    }
+
+    public void changeMaxSpeed(BigDecimal maxSpeed) {
+        this.maxSpeed = maxSpeed;
+    }
+
+    public void changeAveragePace(BigDecimal averagePace) {
+        this.averagePace = averagePace;
     }
 
     public void setUserM(UserM userM) {

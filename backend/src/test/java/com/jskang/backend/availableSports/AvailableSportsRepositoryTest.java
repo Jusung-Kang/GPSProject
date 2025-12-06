@@ -1,9 +1,7 @@
 package com.jskang.backend.availableSports;
 
-import com.jskang.backend.domain.AvailableSports;
-import com.jskang.backend.domain.AvailableSportsId;
-import com.jskang.backend.domain.SportType;
-import com.jskang.backend.domain.UserM;
+import com.jskang.backend.PositionM.PositionMRepository;
+import com.jskang.backend.domain.*;
 import com.jskang.backend.sportType.SportTypeRepository;
 import com.jskang.backend.userM.UserMRepository;
 import jakarta.persistence.EntityManager;
@@ -38,6 +36,10 @@ class AvailableSportsRepositoryTest {
     private UserM savedUser;
     private SportType savedSport;
     private SportType savedSport2;
+    private PositionM savedPosition;
+    private PositionM savedPosition2;
+    @Autowired
+    private PositionMRepository positionMRepository;
 
     @BeforeEach
     void setUp() {
@@ -59,6 +61,18 @@ class AvailableSportsRepositoryTest {
                 .sportNm("야구")
                 .build();
         savedSport2 = sportTypeRepository.save(sportType2);
+
+        PositionM positionM = PositionM.builder()
+                .positionId(100L)
+                .positionNm("test")
+                .build();
+        savedPosition = positionMRepository.save(positionM);
+
+        PositionM positionM2 = PositionM.builder()
+                .positionId(200L)
+                .positionNm("test2")
+                .build();
+        savedPosition2 = positionMRepository.save(positionM2);
     }
 
     @Test
@@ -72,7 +86,7 @@ class AvailableSportsRepositoryTest {
                 .userM(savedUser)
                 .sportType(savedSport)
                 .level("1")
-                .positionCd("1")
+                .positionM(savedPosition)
                 .build();
 
         AvailableSports saved = availableSportsRepository.save(availableSports);
@@ -83,7 +97,7 @@ class AvailableSportsRepositoryTest {
         assertThat(found.getPk().getUserId().equals(savedUser.getUserId()));
         assertThat(found.getPk().getSportId().equals(savedSport.getSportId()));
         assertThat(found.getLevel()).isEqualTo("1");
-        assertThat(found.getPositionCd()).isEqualTo("1");
+        assertThat(found.getPositionM().getPositionNm()).isEqualTo("test");
 
     }
 
@@ -97,11 +111,12 @@ class AvailableSportsRepositoryTest {
                 .userM(savedUser)
                 .sportType(savedSport)
                 .level("1")
-                .positionCd("1")
+                .positionM(savedPosition)
                 .build();
 
         AvailableSports saved = availableSportsRepository.save(availableSports);
-        saved.changeAvailableInfo("2", "3");
+        saved.changeLevel("2");
+        saved.changePositionM(savedPosition2);
 
         em.flush();
         em.clear();
@@ -112,7 +127,7 @@ class AvailableSportsRepositoryTest {
         assertThat(found.getPk().getUserId()).isEqualTo(savedUser.getUserId());
         assertThat(found.getPk().getSportId()).isEqualTo(savedSport.getSportId());
         assertThat(found.getLevel()).isEqualTo("2");
-        assertThat(found.getPositionCd()).isEqualTo("3");
+        assertThat(found.getPositionM().getPositionNm()).isEqualTo("test2");
     }
 
     @Test
@@ -124,7 +139,7 @@ class AvailableSportsRepositoryTest {
                 .userM(savedUser)
                 .sportType(savedSport)
                 .level("1")
-                .positionCd("1")
+                .positionM(savedPosition)
                 .build();
 
         AvailableSports availableSports2 = AvailableSports.builder()
@@ -132,7 +147,7 @@ class AvailableSportsRepositoryTest {
                 .userM(savedUser)
                 .sportType(savedSport2)
                 .level("2")
-                .positionCd("2")
+                .positionM(savedPosition)
                 .build();
 
         availableSportsRepository.save(availableSports1);

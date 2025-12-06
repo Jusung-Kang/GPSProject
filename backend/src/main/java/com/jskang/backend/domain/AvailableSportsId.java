@@ -17,5 +17,4 @@ public class AvailableSportsId implements Serializable {
     private Long userId;
     private Long sportId;
 
-
 }

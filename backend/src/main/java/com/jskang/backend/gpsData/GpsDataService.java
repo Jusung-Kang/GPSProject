@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Transactional(readOnly = true)
@@ -38,31 +39,51 @@ public class GpsDataService {
 
         GpsData saved = gpsDataRepository.save(gps);
 
-
-
-        GpsDataResponseDto response = new GpsDataResponseDto(saved);
-
-        return response;
+        return new GpsDataResponseDto(saved);
     }
 
     @Transactional
-    public GpsDataResponseDto update(Long gpsId, SaveGpsDataRequestDto request) {
+    public int createBulk(Long historyId, List<SaveGpsDataRequestDto> requests) {
+        ExerciseHistory history = exerciseHistoryRepository.findById(historyId)
+                .orElseThrow(() -> new IllegalArgumentException("정보를 찾지 못하였습니다"));
 
-        GpsData gps = gpsDataRepository.findById(gpsId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 기록은 없습니다."));
+        List<GpsData> gpsDataList = new ArrayList<>();
 
-        gps.setMaxRecord(request.getMaxDistance(),  request.getMaxSpeed());
+        for (SaveGpsDataRequestDto request : requests) {
+            GpsData gps = GpsData.builder()
+                    .longitude(request.getLongitude())
+                    .latitude(request.getLatitude())
+                    .altitude(request.getAltitude())
+                    .speed(request.getSpeed())
+                    .distance(request.getDistance())
+                    .heartRate(request.getHeartRate())
+                    .gpsSeq(request.getGpsSeq())
+                    .exerciseHistory(history) // 미리 찾아둔 history 연결
+                    .build();
 
-        GpsDataResponseDto response = new GpsDataResponseDto(gps);
+            gpsDataList.add(gps);
+        }
 
-        return response;
+        gpsDataRepository.saveAll(gpsDataList);
+
+        return gpsDataList.size();
     }
+
+//    @Transactional
+//    public GpsDataResponseDto update(Long gpsId, SaveGpsDataRequestDto request) {
+//
+//        GpsData gps = gpsDataRepository.findById(gpsId)
+//                .orElseThrow(() -> new IllegalArgumentException("해당 기록은 없습니다."));
+//
+//        GpsDataResponseDto response = new GpsDataResponseDto(gps);
+//
+//        return response;
+//    }
 
     public List<GpsDataResponseDto> findAllByHistoryId(Long historyId){
 
         List<GpsData> list = gpsDataRepository.findAllByExerciseHistory_HistoryId(historyId);
-        List<GpsDataResponseDto> response = GpsDataResponseDto.from(list);
-        return response;
+        return GpsDataResponseDto.from(list);
 
     }
 

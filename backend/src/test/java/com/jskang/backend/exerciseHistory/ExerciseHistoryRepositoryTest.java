@@ -2,6 +2,7 @@ package com.jskang.backend.exerciseHistory;
 
 import com.jskang.backend.availableSports.AvailableSportsRepository;
 import com.jskang.backend.domain.*;
+import com.jskang.backend.gpsData.GpsDataRepository;
 import com.jskang.backend.sportType.SportTypeRepository;
 import com.jskang.backend.userM.UserMRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -28,6 +30,8 @@ class ExerciseHistoryRepositoryTest {
 
     @Autowired
     private SportTypeRepository sportTypeRepository;
+
+
 
     // 공통으로 사용할 변수 선언
     private UserM savedUser;
@@ -92,9 +96,9 @@ class ExerciseHistoryRepositoryTest {
                 .seq(1)
                 .build();
 
-
         ExerciseHistory saved = exerciseHistoryRepository.save(history);
         saved.changeSportType(savedSport2);
+        saved.changeTotalData(saved.getTotalDistance(), saved.getTotalTime());
 
         ExerciseHistory found = exerciseHistoryRepository.findById(history.getHistoryId())
                 .orElseThrow();
@@ -135,4 +139,6 @@ class ExerciseHistoryRepositoryTest {
         assertThat(findAll).extracting("seq")
                 .containsExactlyInAnyOrder(findAll.get(0).getSeq(), findAll.get(1).getSeq());
     }
+
+
 }

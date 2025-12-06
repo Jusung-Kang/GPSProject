@@ -1,11 +1,9 @@
 package com.jskang.backend.exerciseHistory;
 
-import com.jskang.backend.domain.AvailableSportsId;
-import com.jskang.backend.domain.ExerciseHistory;
-import com.jskang.backend.domain.SportType;
-import com.jskang.backend.domain.UserM;
+import com.jskang.backend.domain.*;
 import com.jskang.backend.exerciseHistory.dto.ExerciseHistoryResponseDto;
 import com.jskang.backend.exerciseHistory.dto.SaveExerciseHistoryRequestDto;
+import com.jskang.backend.gpsData.GpsDataRepository;
 import com.jskang.backend.sportType.SportTypeRepository;
 import com.jskang.backend.userM.UserMRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,8 +14,10 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -39,6 +39,9 @@ class ExerciseHistoryServiceTest {
     private SportTypeRepository sportTypeRepository;
     @Mock
     private ExerciseHistoryRepository exerciseHistoryRepository;
+
+    @Mock
+    private GpsDataRepository gpsDataRepository;
 
     @InjectMocks
     private ExerciseHistoryService exerciseHistoryService;
@@ -134,6 +137,59 @@ class ExerciseHistoryServiceTest {
         assertThatThrownBy(() -> exerciseHistoryService.update(wrongId, requestDto))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessageContaining("해당 정보를 찾을수 없습니다.");
+    }
+
+    @Test
+    @DisplayName("운동종료")
+    void finishExercise(){
+
+        ExerciseHistory history = ExerciseHistory.builder()
+                .historyId(100L)
+                .userM(savedUser)
+                .sportType(savedSport)
+                .dt(LocalDateTime.now())
+                .seq(1)
+                .build();
+
+        GpsData gpsData1 = GpsData.builder()
+                .exerciseHistory(history)
+                .distance(new BigDecimal("1.0"))
+                .speed(new BigDecimal("1.1"))
+                .longitude(new BigDecimal("1.1"))
+                .latitude(new BigDecimal("1.1"))
+                .altitude(new BigDecimal("1.1"))
+                .build();
+        GpsData gpsData2 = GpsData.builder()
+                .exerciseHistory(history)
+                .distance(new BigDecimal("2.0"))
+                .speed(new BigDecimal("2.2"))
+                .longitude(new BigDecimal("2.2"))
+                .latitude(new BigDecimal("2.2"))
+                .altitude(new BigDecimal("2.2"))
+                .build();
+        GpsData gpsData3 = GpsData.builder()
+                .exerciseHistory(history)
+                .distance(new BigDecimal("3.0"))
+                .speed(new BigDecimal("3.3"))
+                .longitude(new BigDecimal("3.3"))
+                .latitude(new BigDecimal("3.3"))
+                .altitude(new BigDecimal("3.3"))
+                .build();
+
+        history.addGpsData(gpsData1);
+        history.addGpsData(gpsData2);
+        history.addGpsData(gpsData3);
+
+        given(exerciseHistoryRepository.findById(history.getHistoryId()))
+                .willReturn(Optional.of(history));
+
+        ExerciseHistoryResponseDto response = exerciseHistoryService.finishExercise(history.getHistoryId());
+
+        assertThat(response.getTotalDistance()).isEqualByComparingTo(new BigDecimal("6.0"));
+        assertThat(response.getMaxSpeed()).isEqualByComparingTo(new BigDecimal("3.3"));
+        assertThat(response.getTotalTime()).isEqualTo(3L);
+        assertThat(response.getAveragePace()).isEqualByComparingTo(new BigDecimal("0.5"));
+
     }
 
     @Test

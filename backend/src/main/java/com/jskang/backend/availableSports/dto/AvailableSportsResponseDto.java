@@ -1,8 +1,6 @@
 package com.jskang.backend.availableSports.dto;
 
 import com.jskang.backend.domain.AvailableSports;
-import com.jskang.backend.domain.ExerciseHistory;
-import com.jskang.backend.exerciseHistory.dto.ExerciseHistoryResponseDto;
 import lombok.Getter;
 
 import java.util.List;
@@ -11,12 +9,12 @@ import java.util.List;
 public class AvailableSportsResponseDto {
 
     private final String sportName;
-    private final String positionCd;
+    private final Long positionId;
     private final String level;
 
     public AvailableSportsResponseDto(AvailableSports availableSports){
         this.sportName = availableSports.getSportType().getSportNm();
-        this.positionCd = availableSports.getPositionCd();
+        this.positionId = availableSports.getPositionM().getPositionId();
         this.level = availableSports.getLevel();
     }
 

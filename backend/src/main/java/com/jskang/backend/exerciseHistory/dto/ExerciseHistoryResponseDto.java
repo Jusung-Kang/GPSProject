@@ -3,6 +3,7 @@ package com.jskang.backend.exerciseHistory.dto;
 import com.jskang.backend.domain.ExerciseHistory;
 import lombok.Getter;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -13,6 +14,10 @@ public class ExerciseHistoryResponseDto {
     private final String sportNm;
     private final Integer seq;
     private final LocalDateTime dt;
+    private final BigDecimal totalDistance;
+    private final Long totalTime;
+    private final BigDecimal averagePace;
+    private final BigDecimal maxSpeed;
 
 
     public ExerciseHistoryResponseDto(ExerciseHistory entity) {
@@ -21,6 +26,10 @@ public class ExerciseHistoryResponseDto {
         this.dt = entity.getDt();
         // 연관된 SportType에서 이름을 꺼내옴 (NPE 방지 로직은 상황에 따라 추가)
         this.sportNm = entity.getSportType() != null ? entity.getSportType().getSportNm() : "";
+        this.totalDistance = entity.getTotalDistance();
+        this.totalTime = entity.getTotalTime();
+        this.averagePace = entity.getAveragePace();
+        this.maxSpeed = entity.getMaxSpeed();
     }
 
     // DTO 클래스

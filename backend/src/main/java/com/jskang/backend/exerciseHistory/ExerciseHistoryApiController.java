@@ -35,6 +35,15 @@ public class ExerciseHistoryApiController {
 
     }
 
+    @PutMapping("history/{historyId}/finish")
+    public ResponseEntity<ExerciseHistoryResponseDto> finish(@PathVariable Long historyId) {
+
+        ExerciseHistoryResponseDto response = exerciseHistoryService.finishExercise(historyId);
+
+        return ResponseEntity.ok()
+                .body(response);
+    }
+
     @GetMapping("history")
     public ResponseEntity<List<ExerciseHistoryResponseDto>> findAll(){
 

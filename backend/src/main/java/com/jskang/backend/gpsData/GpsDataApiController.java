@@ -24,13 +24,22 @@ public class GpsDataApiController {
                 .body(gpsDataResponseDto);
     }
 
-    @PutMapping("history/gps/{gpsId}")
-    public ResponseEntity<GpsDataResponseDto> update(@PathVariable Long gpsId, @RequestBody SaveGpsDataRequestDto request){
-        GpsDataResponseDto response = gpsDataService.update(gpsId, request);
+    @PostMapping("history/{historyId}/gps/bulk")
+    public ResponseEntity<Integer> createBulk(@PathVariable Long historyId, @RequestBody List<SaveGpsDataRequestDto> request){
 
-        return ResponseEntity.ok()
-                .body(response);
+        int savedCount = gpsDataService.createBulk(historyId, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(savedCount);
+
     }
+
+//    @PutMapping("history/gps/{gpsId}")
+//    public ResponseEntity<GpsDataResponseDto> update(@PathVariable Long gpsId, @RequestBody SaveGpsDataRequestDto request){
+//        GpsDataResponseDto response = gpsDataService.update(gpsId, request);
+//
+//        return ResponseEntity.ok()
+//                .body(response);
+//    }
 
     @GetMapping("history/{historyId}/gps")
     public ResponseEntity<List<GpsDataResponseDto>> findAllByHistoryId(@PathVariable Long historyId){

@@ -2,10 +2,7 @@ package com.jskang.backend.availableSports;
 
 import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
-import com.jskang.backend.domain.AvailableSports;
-import com.jskang.backend.domain.AvailableSportsId;
-import com.jskang.backend.domain.SportType;
-import com.jskang.backend.domain.UserM;
+import com.jskang.backend.domain.*;
 import com.jskang.backend.sportType.SportTypeRepository;
 import com.jskang.backend.userM.UserMRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -47,7 +44,7 @@ class AvailableSportsServiceTest {
         SaveAvailableSportsRequestDto requestDto = new SaveAvailableSportsRequestDto();
         requestDto.setSportId(10L);
         requestDto.setLevel("기본");
-        requestDto.setPositionCd("포드");
+        requestDto.setPositionId(100L);
 
         // 연관 관계 조회를 위한 가짜 객체 (ID만 있으면 됨)
         UserM userM = UserM.builder().userId(userId).build();
@@ -79,7 +76,7 @@ class AvailableSportsServiceTest {
         assertThat(savedEntity.getPk().getUserId()).isEqualTo(userId);
         assertThat(savedEntity.getPk().getSportId()).isEqualTo(10L);
         assertThat(savedEntity.getLevel()).isEqualTo(requestDto.getLevel());      // "기본"
-        assertThat(savedEntity.getPositionCd()).isEqualTo(requestDto.getPositionCd()); // "포드"
+        assertThat(savedEntity.getPositionM().getPositionId()).isEqualTo(requestDto.getPositionId()); // "포드"
     }
 
     @Test
@@ -88,15 +85,16 @@ class AvailableSportsServiceTest {
 
         Long userId = 1L;
         Long sportId = 10L;
+        Long positionId = 100L;
 
         SaveAvailableSportsRequestDto requestDto = new SaveAvailableSportsRequestDto();
         requestDto.setLevel("프로");
-        requestDto.setPositionCd("포드");
+        requestDto.setPositionId(100L);
 
         AvailableSports existing = AvailableSports.builder()
                 .pk(new AvailableSportsId(userId, sportId))
                 .level("아마추어")
-                .positionCd("수비")
+                .positionM(PositionM.builder().positionId(positionId).build())
                 .build();
 
         given(availableSportsRepository.findById(new AvailableSportsId(userId, sportId)))
@@ -105,7 +103,7 @@ class AvailableSportsServiceTest {
         availableSportsService.update(userId, sportId, requestDto);
 
         assertThat(existing.getLevel()).isEqualTo(requestDto.getLevel());
-        assertThat(existing.getPositionCd()).isEqualTo(requestDto.getPositionCd());
+        assertThat(existing.getPositionM().getPositionId()).isEqualTo(requestDto.getPositionId());
     }
 
     @Test

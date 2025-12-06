@@ -3,10 +3,7 @@ package com.jskang.backend.availableSports;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jskang.backend.availableSports.dto.AvailableSportsResponseDto;
 import com.jskang.backend.availableSports.dto.SaveAvailableSportsRequestDto;
-import com.jskang.backend.domain.AvailableSports;
-import com.jskang.backend.domain.AvailableSportsId;
-import com.jskang.backend.domain.SportType;
-import com.jskang.backend.domain.UserM;
+import com.jskang.backend.domain.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,12 +38,13 @@ class AvailableSportsApiControllerTest {
 
         Long userId = 1L;
         Long sportId = 10L;
+        Long positionId = 100L;
 
         //given
         SaveAvailableSportsRequestDto requestDto = new SaveAvailableSportsRequestDto();
         requestDto.setSportId(sportId);
         requestDto.setLevel("초보");
-        requestDto.setPositionCd("수비");
+        requestDto.setPositionId(1L);
 
         //pk 설정
         AvailableSportsId pk = new AvailableSportsId(userId, sportId);
@@ -54,7 +52,7 @@ class AvailableSportsApiControllerTest {
         AvailableSports mockEntity = AvailableSports.builder()
                 .pk(pk)
                 .level("초보")
-                .positionCd("수비")
+                .positionM(PositionM.builder().positionId(positionId).build())
                 .userM(UserM.builder().userId(userId).build())
                 .sportType(SportType.builder().sportId(sportId).build())
                 .build();
@@ -69,8 +67,7 @@ class AvailableSportsApiControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.level").value(mockEntity.getLevel()))
-                .andExpect(jsonPath("$.positionCd").value(mockEntity.getPositionCd()));
+                .andExpect(jsonPath("$.level").value(mockEntity.getLevel()));
 
     }
 
@@ -80,16 +77,17 @@ class AvailableSportsApiControllerTest {
 
         Long userId = 1L;
         Long sportId = 10L;
+        Long positionId = 100L;
 
         //given
         SaveAvailableSportsRequestDto requestDto = new SaveAvailableSportsRequestDto();
         requestDto.setLevel("1");
-        requestDto.setPositionCd("2");
+        requestDto.setPositionId(positionId);
 
         AvailableSports mockEntity = AvailableSports.builder()
                         .pk(new AvailableSportsId(userId, sportId))
                         .level("1")
-                        .positionCd("2")
+                        .positionM(PositionM.builder().positionId(positionId).build())
                         .userM(UserM.builder().userId(userId).build())
                         .sportType(SportType.builder().sportId(sportId).build())
                         .build();
@@ -101,8 +99,7 @@ class AvailableSportsApiControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.level").value(requestDto.getLevel()))
-                .andExpect(jsonPath("$.positionCd").value(requestDto.getPositionCd()));
+                .andExpect(jsonPath("$.level").value(requestDto.getLevel()));
     }
 
     @Test
@@ -111,22 +108,24 @@ class AvailableSportsApiControllerTest {
 
         Long userId1 = 1L;
         Long sportId1 = 10L;
+        Long positionId1 = 100L;
 
         Long userId2 = 2L;
         Long sportId2 = 20L;
+        Long positionId2 = 200L;
 
         List<AvailableSports> mockEntity = List.of(
                 AvailableSports.builder()
                         .pk(new AvailableSportsId(userId1, sportId1))
                         .level("기초")
-                        .positionCd("포드")
+                        .positionM(PositionM.builder().positionId(positionId1).build())
                         .userM(UserM.builder().userId(userId1).build())
                         .sportType(SportType.builder().sportId(sportId1).build())
                         .build()
                 , AvailableSports.builder()
                         .pk(new AvailableSportsId(userId2, sportId2))
                         .level("아마추어")
-                        .positionCd("수비")
+                        .positionM(PositionM.builder().positionId(positionId2).build())
                         .userM(UserM.builder().userId(userId2).build())
                         .sportType(SportType.builder().sportId(sportId2).build())
                         .build()
@@ -139,9 +138,9 @@ class AvailableSportsApiControllerTest {
         mockMvc.perform(get("/api/sports"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].level").value(mockEntity.get(0).getLevel()))
-                .andExpect(jsonPath("$[0].positionCd").value(mockEntity.get(0).getPositionCd()))
+                .andExpect(jsonPath("$[0].positionCd").value(mockEntity.get(0).getPositionM().getPositionId()))
                 .andExpect(jsonPath("$[1].level").value(mockEntity.get(1).getLevel()))
-                .andExpect(jsonPath("$[1].positionCd").value(mockEntity.get(1).getPositionCd()));
+                .andExpect(jsonPath("$[1].positionCd").value(mockEntity.get(1).getPositionM().getPositionId()));
 
     }
 
@@ -150,11 +149,12 @@ class AvailableSportsApiControllerTest {
 
         Long userId = 1L;
         Long sportId = 10L;
+        Long positionId = 100L;
 
         AvailableSports mockEntity = AvailableSports.builder()
                 .pk(new AvailableSportsId(userId, sportId))
                 .level("기초")
-                .positionCd("포드")
+                .positionM(PositionM.builder().positionId(positionId).build())
                 .userM(UserM.builder().userId(userId).build())
                 .sportType(SportType.builder().sportId(sportId).build())
                 .build();
@@ -164,7 +164,7 @@ class AvailableSportsApiControllerTest {
         mockMvc.perform(get("/api/users/{userId}/sports/{sportId}", userId, sportId))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.level").value(mockEntity.getLevel()))
-                .andExpect(jsonPath("$.positionCd").value(mockEntity.getPositionCd()));
+                .andExpect(jsonPath("$.positionCd").value(mockEntity.getPositionM().getPositionId()));
 
 
     }

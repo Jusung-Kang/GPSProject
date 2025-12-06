@@ -1,12 +1,12 @@
 package com.jskang.backend.exerciseHistory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.jskang.backend.availableSports.AvailableSportsService;
 import com.jskang.backend.domain.ExerciseHistory;
 import com.jskang.backend.domain.SportType;
 import com.jskang.backend.domain.UserM;
 import com.jskang.backend.exerciseHistory.dto.ExerciseHistoryResponseDto;
 import com.jskang.backend.exerciseHistory.dto.SaveExerciseHistoryRequestDto;
+import jakarta.persistence.EntityManagerFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,15 +16,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -166,6 +164,30 @@ class ExerciseHistoryApiControllerTest {
                 .andExpect(content().string("기록이 존재하지않습니다."));
 
 
+    }
+
+    @Test
+    @DisplayName("운동종료")
+    void finishExercise() throws Exception{
+        ExerciseHistory mockResponse = ExerciseHistory.builder() // 빌더가 없다면 생성자 사용
+                .historyId(historyId)
+                .totalDistance(new BigDecimal("5.5"))
+                .totalTime(3600L)
+                .maxSpeed(new BigDecimal("12.0"))
+                .averagePace(new BigDecimal("5.3"))
+                .build();
+
+        ExerciseHistoryResponseDto response = new ExerciseHistoryResponseDto(mockResponse);
+
+        given(exerciseHistoryService.finishExercise(historyId))
+                .willReturn(response);
+
+        mockMvc.perform(put("/api/history/{historyId}/finish", historyId)
+                                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.historyId").value(historyId))
+                .andExpect(jsonPath("$.totalDistance").value(5.5))
+                .andExpect(jsonPath("$.totalTime").value(3600));
     }
 
     @Test

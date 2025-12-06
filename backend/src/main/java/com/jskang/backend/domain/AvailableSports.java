@@ -14,9 +14,6 @@ public class AvailableSports {
     @EmbeddedId
     // AvailableSportsId에 id, sportId 존재
     private AvailableSportsId pk;
-
-    private String positionCd;
-
     private String level;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -31,13 +28,26 @@ public class AvailableSports {
     @ToString.Exclude
     private SportType sportType;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("positionId")
+    @JoinColumn(name = "position_id")
+    @ToString.Exclude
+    private PositionM positionM;
+
     public void setUserM(UserM userM) {
         this.userM = userM;
     }
 
-    public void changeAvailableInfo(String level, String positionCd) {
+    public void setPositionM(PositionM positionM) {
+        this.positionM = positionM;
+    }
+
+    public void changePositionM(PositionM positionM) {
+        this.positionM = positionM;
+    }
+
+    public void changeLevel(String level) {
         this.level = level;
-        this.positionCd = positionCd;
     }
 
 
