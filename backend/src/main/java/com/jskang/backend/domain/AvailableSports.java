@@ -29,7 +29,6 @@ public class AvailableSports {
     private SportType sportType;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @MapsId("positionId")
     @JoinColumn(name = "position_id")
     @ToString.Exclude
     private PositionM positionM;

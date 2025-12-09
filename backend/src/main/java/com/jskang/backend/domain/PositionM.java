@@ -19,7 +19,7 @@ public class PositionM {
     private Long positionId;
     private String positionNm;
 
-    @OneToMany(mappedBy = "availableSports")
+    @OneToMany(mappedBy = "positionM")
     @Builder.Default
     @ToString.Exclude
     private Set<AvailableSports> availableSports = new HashSet<>();
