@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class SaveSportTypeRequestDto {
 
-    private Long sportId;
     private String sportNm;
 
 }

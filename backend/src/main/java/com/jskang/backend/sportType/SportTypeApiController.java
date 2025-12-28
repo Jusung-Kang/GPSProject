@@ -17,7 +17,7 @@ public class SportTypeApiController {
 
     private final SportTypeService sportTypeService;
 
-    @PostMapping("sportTypes")
+    @PostMapping("types")
     public ResponseEntity<SportTypeResponseDto> createSportType(@RequestBody SaveSportTypeRequestDto requestSportType) {
 
         SportType sportType = sportTypeService.createSportType(requestSportType);
@@ -29,7 +29,7 @@ public class SportTypeApiController {
 
     }
 
-    @PutMapping("sportTypes/{sportId}")
+    @PutMapping("types/{sportId}")
     public ResponseEntity<SportTypeResponseDto> updateSportType(@PathVariable Long sportId, @RequestBody SaveSportTypeRequestDto requestSportType) {
 
         SportType sportType = sportTypeService.updateSportType(sportId, requestSportType);
@@ -39,7 +39,7 @@ public class SportTypeApiController {
 
     }
 
-    @GetMapping("sportTypes")
+    @GetMapping("types")
     public ResponseEntity<List<SportTypeResponseDto>> findAll() {
 
         List<SportTypeResponseDto> responseSportType = sportTypeService.findAll()
@@ -51,7 +51,7 @@ public class SportTypeApiController {
                 .body(responseSportType);
     }
 
-    @GetMapping("sportTypes/{sportId}")
+    @GetMapping("types/{sportId}")
     public ResponseEntity<SportTypeResponseDto> findById(@PathVariable Long sportId) {
         SportType sportType = sportTypeService.findById(sportId);
 

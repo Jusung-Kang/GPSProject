@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Getter
 public class UserMResponseDto {
 
-    private final Long userId;
+    private final String nm;
     private final String email;
     private final String phoneNumber;
     private final List<AvailableSportsResponseDto> availableSports;
@@ -19,7 +19,7 @@ public class UserMResponseDto {
 
     @Builder
     public UserMResponseDto(UserM userM) {
-        this.userId = userM.getUserId();
+        this.nm = userM.getNm();
         this.email = userM.getEmail();
         this.phoneNumber = userM.getPhoneNumber();
 

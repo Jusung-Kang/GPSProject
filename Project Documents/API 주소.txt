@@ -1,0 +1,22 @@
+USERM
+POST, GET: http://localhost:8080/api/users
+UPDATE, FBI: http://localhost:8080/api/users/1
+POST
+{
+  "nm": "TestKim",
+  "email": "aaaa@gmail.com",
+  "password": "test123", 
+  "phoneNumber": "01011112222" 
+}
+UPDATE
+{
+  "email": "aaaa@gmail.com",
+  "phoneNumber": "01011112222" 
+}
+
+SPORTTYPE
+POST, GET: http://localhost:8080/api/types
+UPDATE, FBI
+{
+  "sportNm": "배구"
+}

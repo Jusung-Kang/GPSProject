@@ -19,7 +19,9 @@ public class UserMService {
     public UserMResponseDto create(SaveUserMRequestDto requestUser){
 
         UserM newUserM = UserM.builder()
+                .nm(requestUser.getNm())
                 .email(requestUser.getEmail())
+                .password(requestUser.getPassword())
                 .phoneNumber(requestUser.getPhoneNumber())
                 .build();
 

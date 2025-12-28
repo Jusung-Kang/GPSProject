@@ -17,8 +17,8 @@ import java.util.Set;
 public class SportType {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sportId;
-
     private String sportNm;
 
     @OneToMany(mappedBy = "sportType", cascade = CascadeType.ALL, orphanRemoval = true)

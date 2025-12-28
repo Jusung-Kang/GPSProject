@@ -7,12 +7,10 @@ import lombok.Setter;
 @Getter
 public class SportTypeResponseDto {
 
-    private final Long sportId;
     private final String sportNm;
 
     public SportTypeResponseDto(SportType sportType) {
 
-        this.sportId = sportType.getSportId();
         this.sportNm = sportType.getSportNm();
     }
 

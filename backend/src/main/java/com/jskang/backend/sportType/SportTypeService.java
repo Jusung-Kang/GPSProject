@@ -19,7 +19,6 @@ public class SportTypeService {
     public SportType createSportType(SaveSportTypeRequestDto saveSportType) {
 
         SportType sportType = SportType.builder()
-                .sportId(saveSportType.getSportId())
                 .sportNm(saveSportType.getSportNm())
                 .build();
 
